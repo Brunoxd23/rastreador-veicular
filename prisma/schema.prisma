@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      String    @default("client")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  tickets   Ticket[]  @relation("UserTickets")
+  assigned  Ticket[]  @relation("AssignedTickets")
+  vehicles  Vehicle[]
+  rastreadores Rastreador[] @relation("UserRastreadores")
+  faturas   Fatura[] @relation("UserFaturas")
+  messages  Message[]
+
+}
+
+model Rastreador {
+  id           Int      @id @default(autoincrement())
+  modelo       String
+  identificador String  @unique
+  status       String   @default("ativo") // ativo, bloqueado
+  vehicleId    Int
+  userId       Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  vehicle      Vehicle  @relation(fields: [vehicleId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], name: "UserRastreadores")
+  licencas     Licenca[]
+  posicoes     Posicao[]
+}
+
+model Posicao {
+  id            Int      @id @default(autoincrement())
+  rastreadorId  Int
+  latitude      Float
+  longitude     Float
+  dataRecebida  DateTime @default(now())
+  rastreador    Rastreador @relation(fields: [rastreadorId], references: [id])
+}
+
+model Vehicle {
+  id        Int      @id @default(autoincrement())
+  plate     String   @unique
+  model     String
+  brand     String
+  year      Int
+  userId    Int
+  rastreadores Rastreador[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+model Licenca {
+  id           Int      @id @default(autoincrement())
+  rastreadorId Int
+  valor        Float
+  status       String   @default("pendente") // pendente, paga, bloqueada
+  dataEmissao  DateTime @default(now())
+  dataVencimento DateTime
+  rastreador   Rastreador @relation(fields: [rastreadorId], references: [id])
+}
+
+model Ticket {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  status      String    @default("aberto")
+  priority    String    @default("baixa")
+  userId      Int
+  assigneeId  Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  resolution  String?
+  messages    Message[]
+  user        User      @relation("UserTickets", fields: [userId], references: [id])
+  assignee    User?     @relation("AssignedTickets", fields: [assigneeId], references: [id])
+}
+
+model Message {
+  id       Int      @id @default(autoincrement())
+  texto    String
+  autor    Int
+  data     DateTime @default(now())
+  ticketId Int
+  ticket   Ticket   @relation(fields: [ticketId], references: [id])
+  user     User     @relation(fields: [autor], references: [id])
+}
+
+model Fatura {
+  id          Int      @id @default(autoincrement())
+  valor       Float
+  status      String   @default("pendente") // "pendente", "pago", "cancelado"
+  dataEmissao DateTime @default(now())
+  dataVencimento DateTime
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], name: "UserFaturas")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+} 
