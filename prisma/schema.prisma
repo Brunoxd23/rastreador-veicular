@@ -23,6 +23,8 @@ model User {
   rastreadores Rastreador[] @relation("UserRastreadores")
   faturas   Fatura[] @relation("UserFaturas")
   messages  Message[]
+  resetPasswordToken String?
+  resetPasswordExpires DateTime?
 
 }
 
