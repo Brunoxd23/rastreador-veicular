@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Loading from "../components/Loading";
 
-export default function VeiculosPage() {
+function VeiculosContent() {
   const [loading, setLoading] = useState(true);
   const [veiculos, setVeiculos] = useState<any[]>([]);
   const [error, setError] = useState("");
@@ -131,5 +131,13 @@ export default function VeiculosPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VeiculosPage() {
+  return (
+    <Suspense>
+      <VeiculosContent />
+    </Suspense>
   );
 }

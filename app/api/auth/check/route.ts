@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import prisma from "../../../utils/database";
+import { prisma } from "../../../utils/database";
 import { verify } from "jsonwebtoken";
 
 export async function GET() {

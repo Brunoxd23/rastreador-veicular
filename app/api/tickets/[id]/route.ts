@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "../../../../utils/database";
 import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 import { verify } from "jsonwebtoken";

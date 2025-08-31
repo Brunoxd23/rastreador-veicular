@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../../utils/database";
+import { prisma } from "../../../utils/database";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { verify } from "jsonwebtoken";
@@ -20,7 +20,7 @@ async function getUserIdFromToken() {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const userId = await getUserIdFromToken();
   if (!userId) {
@@ -30,7 +30,8 @@ export async function GET(
     );
   }
   try {
-    const { id } = params;
+    const awaitedParams = await params;
+    const { id } = awaitedParams;
     const user = await prisma.user.findUnique({
       where: { id: Number(id) },
       select: {
@@ -60,7 +61,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const userId = await getUserIdFromToken();
   if (!userId) {
@@ -70,7 +71,8 @@ export async function PUT(
     );
   }
   try {
-    const { id } = params;
+    const awaitedParams = await params;
+    const { id } = awaitedParams;
     const body = await request.json();
     const { name, email, password, isAdmin } = body;
 
@@ -135,7 +137,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const userId = await getUserIdFromToken();
   if (!userId) {
@@ -145,7 +147,8 @@ export async function DELETE(
     );
   }
   try {
-    const { id } = params;
+    const awaitedParams = await params;
+    const { id } = awaitedParams;
     const user = await prisma.user.findUnique({
       where: { id: Number(id) },
     });

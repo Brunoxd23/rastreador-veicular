@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import User from "@/models/User"; // Adicione o import do modelo User
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient(); // Adicione o import do modelo User
 
 // Configuração do nodemailer
 const transporter = nodemailer.createTransport({
-  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -26,17 +26,15 @@ export async function POST(req: Request) {
       );
     }
 
-    // Busca o usuário pelo email
-    const user = await User.findOne({ email }).select(
-      "+resetPasswordToken +resetPasswordExpires"
+  // Busca o usuário pelo email
+  // Busca o usuário pelo email usando Prisma
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    return NextResponse.json(
+      { success: false, message: "Usuário não encontrado" },
+      { status: 404 }
     );
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: "Usuário não encontrado" },
-        { status: 404 }
-      );
-    }
+  }
 
     // Verifica se já existe um token válido e se foi solicitado recentemente
     const now = Date.now();
@@ -91,9 +89,13 @@ export async function POST(req: Request) {
     const resetPasswordExpires = new Date(now + 3600000); // 1 hora
 
     // Salva o token no usuário
-    user.resetPasswordToken = token;
-    user.resetPasswordExpires = resetPasswordExpires;
-    await user.save();
+    await prisma.user.update({
+      where: { email },
+      data: {
+        resetPasswordToken: token,
+        resetPasswordExpires: resetPasswordExpires,
+      },
+    });
 
     // URL de reset
     const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`;

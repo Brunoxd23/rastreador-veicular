@@ -1,30 +1,31 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { toast } from 'react-hot-toast';
+"use client";
+import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-hot-toast";
 
 export default function SuportePage() {
   const { user } = useAuth();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('baixa');
-  const [status, setStatus] = useState('aberto');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("baixa");
+  const [status, setStatus] = useState("aberto");
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Função para carregar tickets
   const loadTickets = async () => {
     try {
-      const response = await fetch('/api/tickets', {
-        credentials: 'include'
+      const response = await fetch("/api/tickets", {
+        credentials: "include",
       });
       if (response.ok) {
         const data = await response.json();
         setTickets(data);
       } else {
-        console.error('Erro ao carregar tickets');
+        console.error("Erro ao carregar tickets");
       }
     } catch (error) {
-      console.error('Erro ao carregar tickets:', error);
+      console.error("Erro ao carregar tickets:", error);
     } finally {
       setLoading(false);
     }
@@ -36,43 +37,43 @@ export default function SuportePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const ticketData: any = {
       title: title,
-      description: description
+      description: description,
     };
 
     // Apenas incluir status e prioridade se for admin ou funcionário
-    if (user?.role === 'admin' || user?.role === 'funcionario') {
+    if (user?.role === "admin" || user?.role === "funcionario") {
       ticketData.status = status;
       ticketData.priority = priority;
     }
 
     try {
-      const response = await fetch('/api/tickets', {
-        method: 'POST',
+      const response = await fetch("/api/tickets", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
-        body: JSON.stringify(ticketData)
+        credentials: "include",
+        body: JSON.stringify(ticketData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        toast.success('Ticket criado com sucesso!');
-        setTitle('');
-        setDescription('');
-        setPriority('baixa');
-        setStatus('aberto');
+        toast.success("Ticket criado com sucesso!");
+        setTitle("");
+        setDescription("");
+        setPriority("baixa");
+        setStatus("aberto");
         loadTickets(); // Recarrega a lista de tickets
       } else {
-        toast.error(data.error || 'Erro ao criar ticket');
+        toast.error(data.error || "Erro ao criar ticket");
       }
     } catch (error) {
-      console.error('Erro ao criar ticket:', error);
-      toast.error('Erro ao criar ticket');
+      console.error("Erro ao criar ticket:", error);
+      toast.error("Erro ao criar ticket");
     }
   };
 
@@ -109,7 +110,7 @@ export default function SuportePage() {
           </div>
 
           {/* Mostrar campos de status e prioridade apenas para admin e funcionário */}
-          {(user?.role === 'admin' || user?.role === 'funcionario') && (
+          {(user?.role === "admin" || user?.role === "funcionario") && (
             <>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -179,13 +180,27 @@ export default function SuportePage() {
         <table className="min-w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TÍTULO</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STATUS</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PRIORIDADE</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CLIENTE</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ATENDENTE</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DATA</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AÇÕES</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                TÍTULO
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                STATUS
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                PRIORIDADE
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                CLIENTE
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                ATENDENTE
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                DATA
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                AÇÕES
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -207,11 +222,17 @@ export default function SuportePage() {
                   <td className="px-6 py-4">{ticket.title}</td>
                   <td className="px-6 py-4">{ticket.status}</td>
                   <td className="px-6 py-4">{ticket.priority}</td>
-                  <td className="px-6 py-4">{ticket.user?.name || 'N/A'}</td>
-                  <td className="px-6 py-4">{ticket.assignee?.name || 'Não atribuído'}</td>
-                  <td className="px-6 py-4">{new Date(ticket.createdAt).toLocaleDateString()}</td>
+                  <td className="px-6 py-4">{ticket.user?.name || "N/A"}</td>
                   <td className="px-6 py-4">
-                    <button className="text-purple-600 hover:text-purple-900">Ver detalhes</button>
+                    {ticket.assignee?.name || "Não atribuído"}
+                  </td>
+                  <td className="px-6 py-4">
+                    {new Date(ticket.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4">
+                    <button className="text-purple-600 hover:text-purple-900">
+                      Ver detalhes
+                    </button>
                   </td>
                 </tr>
               ))
@@ -221,4 +242,4 @@ export default function SuportePage() {
       </div>
     </div>
   );
-} 
+}
