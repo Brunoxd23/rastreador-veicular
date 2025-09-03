@@ -17,9 +17,18 @@ export async function GET(req: NextRequest) {
     include: { posicoes: { orderBy: { dataRecebida: "desc" }, take: 1 } },
   });
   if (!rastreador || rastreador.posicoes.length === 0) {
+    // Mock: Rua Marajó 166, Embu das Artes, Jardim das Oliveiras, CEP 06817230
+    // Coordenadas aproximadas: lat -23.6485, lng -46.8526
     return new Response(
-      JSON.stringify({ success: false, error: "Posição não encontrada" }),
-      { status: 404 }
+      JSON.stringify({
+        success: true,
+        lat: -23.6485,
+        lng: -46.8526,
+        mock: true,
+        message:
+          "Posição real ainda não carregada. Mostrando localização padrão: Rua Marajó 166, Embu das Artes, Jardim das Oliveiras. Assim que o rastreador enviar sinal, o mapa será atualizado automaticamente.",
+      }),
+      { status: 200 }
     );
   }
   const pos = rastreador.posicoes[0];

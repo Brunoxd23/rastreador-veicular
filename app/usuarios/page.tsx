@@ -278,17 +278,14 @@ export default function UsuariosPage() {
     }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
+  // Hooks para veículos e rastreadores (sempre no topo)
+  const [veiculos, setVeiculos] = useState<any[]>([]);
+  const [loadingVeiculos, setLoadingVeiculos] = useState(true);
+  const [errorVeiculos, setErrorVeiculos] = useState("");
+  const [posicoes, setPosicoes] = useState<any>({});
 
-  // Se for client, exibe veículos vinculados
-  if (currentUser && currentUser.role === "client") {
-    const [veiculos, setVeiculos] = useState<any[]>([]);
-    const [loadingVeiculos, setLoadingVeiculos] = useState(true);
-    const [errorVeiculos, setErrorVeiculos] = useState("");
-
-    useEffect(() => {
+  useEffect(() => {
+    if (currentUser && currentUser.role === "client") {
       async function fetchVeiculos() {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -317,11 +314,11 @@ export default function UsuariosPage() {
         }
       }
       fetchVeiculos();
-    }, []);
+    }
+  }, [currentUser]);
 
-    // Maps e rastreadores
-    const [posicoes, setPosicoes] = useState<any>({});
-    useEffect(() => {
+  useEffect(() => {
+    if (currentUser && currentUser.role === "client") {
       async function fetchPosicoes() {
         const novas: any = {};
         for (const v of veiculos) {
@@ -332,7 +329,12 @@ export default function UsuariosPage() {
               );
               const data = await res.json();
               if (data.success) {
-                novas[r.id] = { lat: data.lat, lng: data.lng };
+                novas[r.id] = {
+                  lat: data.lat,
+                  lng: data.lng,
+                  mock: data.mock,
+                  message: data.message,
+                };
               }
             }
           }
@@ -344,18 +346,42 @@ export default function UsuariosPage() {
         const interval = setInterval(fetchPosicoes, 10000);
         return () => clearInterval(interval);
       }
-    }, [veiculos]);
+    }
+  }, [veiculos, currentUser]);
 
-    const Map = require("../configuracoes/rastreador/RastreadorMap").default;
+  const Map = React.useMemo(
+    () =>
+      require("next/dynamic")(
+        () => import("../configuracoes/rastreador/RastreadorMap"),
+        { ssr: false }
+      ),
+    []
+  );
 
+  // Render condicional: spinner global sempre antes de qualquer conteúdo
+  if (loading) {
+    return (
+      <div className="flex w-full h-[70vh] items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
+
+  // Conteúdo só renderiza após loading ser false
+  if (currentUser && currentUser.role === "client") {
+    if (loadingVeiculos) {
+      return (
+        <div className="flex w-full h-[70vh] items-center justify-center">
+          <Loading />
+        </div>
+      );
+    }
     return (
       <div>
         <Header />
         <div className="p-8">
           <h2 className="text-2xl font-bold mb-6">Meus Veículos</h2>
-          {loadingVeiculos ? (
-            <Loading />
-          ) : errorVeiculos ? (
+          {errorVeiculos ? (
             <div className="text-red-600 mb-4">{errorVeiculos}</div>
           ) : veiculos.length === 0 ? (
             <p className="text-gray-600">Nenhum veículo cadastrado.</p>
@@ -364,7 +390,7 @@ export default function UsuariosPage() {
               {veiculos.map((v) => (
                 <div
                   key={v.id}
-                  className="border rounded-lg p-4 shadow hover:shadow-lg transition"
+                  className="border rounded-lg p-2 shadow hover:shadow-lg transition max-w-xs w-full mx-auto text-sm"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <svg
@@ -402,18 +428,21 @@ export default function UsuariosPage() {
                             Rastreador: {r.modelo}
                           </div>
                           <div>Identificador (IMEI): {r.identificador}</div>
-                          {posicoes[r.id] ? (
-                            <div className="w-full h-64 mt-2 rounded overflow-hidden">
-                              <Map
-                                lat={posicoes[r.id].lat}
-                                lng={posicoes[r.id].lng}
-                              />
-                            </div>
-                          ) : (
-                            <div className="text-gray-500 mt-2">
-                              Aguardando posição...
-                            </div>
-                          )}
+                          <div className="w-full h-64 mt-2 rounded overflow-hidden relative">
+                            <Map
+                              lat={posicoes[r.id]?.lat ?? -23.6485}
+                              lng={posicoes[r.id]?.lng ?? -46.8526}
+                            />
+                            {(posicoes[r.id]?.mock || !posicoes[r.id]) && (
+                              <div
+                                className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 text-gray-700 font-semibold text-center p-4"
+                                style={{ pointerEvents: "none" }}
+                              >
+                                {posicoes[r.id]?.message ??
+                                  "Posição real ainda não carregada. Mostrando localização padrão: Rua Marajó 166, Embu das Artes, Jardim das Oliveiras. Assim que o rastreador enviar sinal, o mapa será atualizado automaticamente."}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -452,6 +481,14 @@ export default function UsuariosPage() {
         return "bg-gray-100 text-gray-800";
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex w-full h-[70vh] items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -494,6 +531,7 @@ export default function UsuariosPage() {
               {editingUser ? "Editar Usuário" : "Novo Usuário"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Campos do formulário */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Nome

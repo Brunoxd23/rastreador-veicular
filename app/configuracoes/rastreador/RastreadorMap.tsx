@@ -7,30 +7,38 @@ interface RastreadorMapProps {
   lng: number;
 }
 
-const containerStyle = {
-  width: "100%",
-  height: "100%",
-};
+// Usando Tailwind para responsividade e visual moderno
+const containerStyle = {};
 
-// Defina o ícone de carro
+// Ícone profissional de carro rastreado (SVG)
 const carIcon = L.icon({
-  iconUrl: "/car-icon.png", // coloque sua imagem em public/car-icon.png
-  iconSize: [32, 32], // ajuste o tamanho conforme necessário
-  iconAnchor: [16, 32], // ponto de ancoragem do ícone
-  popupAnchor: [0, -32],
+  iconUrl: "/tracker-car.svg", // SVG fornecido pelo usuário
+  iconSize: [64, 53], // tamanho proporcional ao SVG
+  iconAnchor: [32, 53], // âncora na base do carro
+  popupAnchor: [0, -53],
+  className: "leaflet-car-marker",
 });
 
 const RastreadorMap: React.FC<RastreadorMapProps> = ({ lat, lng }) => {
   return (
-    <div style={containerStyle}>
+    <div
+      className="relative w-full h-[70vh] flex items-center justify-center rounded-2xl shadow-xl border-2 border-blue-600 bg-gradient-to-br from-blue-50 via-white to-blue-100 transition-all duration-300"
+      style={containerStyle}
+    >
       <MapContainer
         center={[lat, lng] as [number, number]}
         zoom={16}
         style={{ width: "100%", height: "100%" }}
+        dragging={true}
+        scrollWheelZoom={true}
+        doubleClickZoom={true}
+        touchZoom={true}
+        boxZoom={true}
+        keyboard={true}
       >
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-          attribution="&copy; OpenStreetMap &copy; CartoDB"
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          attribution="MoviTrace"
         />
         <Marker position={[lat, lng]} icon={carIcon} />
       </MapContainer>

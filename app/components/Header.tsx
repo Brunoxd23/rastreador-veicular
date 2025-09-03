@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
+import { FiLogOut } from "react-icons/fi";
 
 export default function Header() {
   const pathname = usePathname();
@@ -44,15 +45,12 @@ export default function Header() {
   const menuItems = getMenuItems();
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo e Botão do Menu */}
           <div className="flex items-center">
-            <Link
-              href="/dashboard"
-              className="text-xl font-bold text-purple-600"
-            >
+            <Link href="/dashboard" className="text-xl font-bold text-blue-700">
               {user?.role === "admin" || user?.role === "funcionario"
                 ? "Painel Admin"
                 : "Sistema de Rastreamento"}
@@ -60,7 +58,7 @@ export default function Header() {
             {/* Botão do Menu Hambúrguer */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="ml-4 -mr-2 h-10 w-10 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 md:hidden"
+              className="ml-4 -mr-2 h-10 w-10 inline-flex items-center justify-center rounded-md p-2 text-blue-700 hover:bg-blue-100 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-400 md:hidden"
             >
               <span className="sr-only">Abrir menu</span>
               {/* Ícone do Menu */}
@@ -96,9 +94,9 @@ export default function Header() {
               <Link
                 key={item.path}
                 href={item.path}
-                className={`${isActive(
-                  item.path
-                )} inline-flex items-center px-1 pt-1 text-sm font-medium`}
+                className={`inline-flex items-center px-1 pt-1 text-sm font-medium text-blue-700 hover:text-blue-900 hover:border-b-2 hover:border-blue-300 transition-colors ${
+                  pathname === item.path ? "border-b-2 border-blue-300" : ""
+                }`}
               >
                 {item.label}
               </Link>
@@ -108,16 +106,17 @@ export default function Header() {
           {/* Área do Usuário */}
           <div className="hidden md:flex items-center space-x-4">
             {user?.name && (
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-blue-700">
                 Bem-vindo,{" "}
-                <span className="font-medium text-purple-600">{user.name}</span>
+                <span className="font-medium text-blue-600">{user.name}</span>
               </span>
             )}
             <button
               onClick={logout}
-              className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors"
+              className="p-2 rounded-md text-blue-700 hover:bg-blue-100 hover:text-blue-900 transition-colors flex items-center"
+              title="Sair"
             >
-              Sair
+              <FiLogOut className="w-5 h-5 text-red-600" />
             </button>
           </div>
         </div>
@@ -129,12 +128,10 @@ export default function Header() {
               <Link
                 key={item.path}
                 href={item.path}
-                className={`${isActive(
-                  item.path
-                )} block pl-3 pr-4 py-2 text-base font-medium border-l-4 ${
+                className={`block pl-3 pr-4 py-2 text-base font-medium border-l-4 text-white hover:bg-blue-700 hover:border-blue-400 transition-colors ${
                   pathname === item.path
-                    ? "border-purple-500 text-purple-700 bg-purple-50"
-                    : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300"
+                    ? "border-blue-400 bg-blue-800"
+                    : "border-transparent"
                 }`}
               >
                 {item.label}
@@ -142,21 +139,21 @@ export default function Header() {
             ))}
           </div>
           {/* Área do Usuário Mobile */}
-          <div className="pt-4 pb-3 border-t border-gray-200">
+          <div className="pt-4 pb-3 border-t border-blue-300">
             {user?.name && (
               <div className="px-4 py-2">
-                <div className="text-base font-medium text-gray-800">
-                  Bem-vindo,{" "}
-                  <span className="text-purple-600">{user.name}</span>
+                <div className="text-base font-medium text-blue-700">
+                  Bem-vindo, <span className="text-blue-600">{user.name}</span>
                 </div>
               </div>
             )}
             <div className="px-4 py-2">
               <button
                 onClick={logout}
-                className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700"
+                className="w-10 h-10 flex justify-center items-center rounded-md text-blue-700 hover:bg-blue-100 hover:text-blue-900"
+                title="Sair"
               >
-                Sair
+                <FiLogOut className="w-5 h-5 text-red-600" />
               </button>
             </div>
           </div>

@@ -1,28 +1,40 @@
 import { NextResponse } from "next/server";
-import twilio from "twilio";
+// Integração SMSDev
 
 export async function POST(req: Request) {
   const { to, message } = await req.json();
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const from = process.env.TWILIO_PHONE_NUMBER;
-
-  if (!accountSid || !authToken || !from) {
+  const smsdevKey = process.env.SMSDEV_KEY;
+  if (!smsdevKey) {
     return NextResponse.json(
-      { success: false, error: "Twilio config missing" },
+      { success: false, error: "SMSDev config missing" },
       { status: 500 }
     );
   }
-
-  const client = twilio(accountSid, authToken);
-
   try {
-    const sms = await client.messages.create({
-      body: message,
-      from,
-      to,
+    const res = await fetch("https://api.smsdev.com.br/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        key: smsdevKey,
+        type: "text",
+        number: to,
+        msg: message,
+      }).toString(),
     });
-    return NextResponse.json({ success: true, sid: sms.sid });
+    const data = await res.json();
+    if (data.status === "success" || data.result === "success") {
+      return NextResponse.json({ success: true, id: data.id || data.id_send });
+    } else {
+      // Log detalhado do erro retornado pela SMSDev
+      return NextResponse.json(
+        {
+          success: false,
+          error: data.message || "Erro ao enviar SMS",
+          smsdev: data,
+        },
+        { status: 500 }
+      );
+    }
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error?.message || "Erro ao enviar SMS" },

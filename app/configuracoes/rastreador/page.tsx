@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRef as useToastRef } from "react";
+import MapaTeste from "./MapaTeste";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { Html5QrcodeScanner } from "html5-qrcode";
@@ -201,8 +202,11 @@ export default function CadastroRastreador() {
       const data = await res.json();
       if (data.success && data.lat && data.lng) {
         setPosicao({ lat: data.lat, lng: data.lng });
+      } else {
+        setPosicao(null);
       }
     } catch {}
+    setPosicao(null);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -275,19 +279,55 @@ export default function CadastroRastreador() {
           Voltar
         </button>
         <h2 className="text-2xl font-bold mb-6">Cadastro de Rastreador</h2>
+        {/* Instruções de ativação manual */}
+        <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 text-blue-900 rounded">
+          <h3 className="font-bold mb-2">Como ativar o rastreador?</h3>
+          <ul className="list-disc pl-5 space-y-1 text-sm">
+            <li>
+              Após cadastrar o rastreador, envie manualmente os comandos de
+              configuração para o número do chip M2 inserido no rastreador.
+            </li>
+            <li>
+              Você pode copiar os comandos abaixo e enviá-los via SMS usando seu
+              celular ou clicar em "Enviar SMS" para enviar diretamente.
+            </li>
+            <li>
+              O processo de ativação é <span className="font-bold">manual</span>{" "}
+              e depende do envio correto dos comandos para o chip.
+            </li>
+            <li>
+              Após ativar, utilize o botão "Atualizar localização" para
+              verificar se o rastreador está comunicando com o sistema.
+            </li>
+          </ul>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Botão para ativar chip após cadastro */}
           <button
             type="button"
-            className="w-full bg-green-600 text-white py-2 rounded font-bold mt-2"
+            className="w-full bg-green-700 text-white py-2 rounded font-bold mt-2"
             onClick={() => setShowAtivarChip(true)}
           >
-            Ativar Chip
+            Enviar comandos de ativação manual
           </button>
           {/* Modal de ativação do chip */}
           {showAtivarChip && (
             <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
               <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full relative">
+                {/* Aviso de ativação manual */}
+                <div className="mb-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-900 rounded">
+                  <span className="font-semibold">Atenção:</span> O rastreador
+                  só será ativado após o envio manual dos comandos abaixo para o
+                  chip M2 via SMS. Certifique-se de que o chip está inserido e
+                  ativo no rastreador.
+                </div>
+                <button
+                  className="mb-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  onClick={() => buscarPosicao(identificador)}
+                  type="button"
+                >
+                  Atualizar localização
+                </button>
                 <button
                   className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
                   onClick={() => setShowAtivarChip(false)}

@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.text-purple-600 {
+  --tw-text-opacity: 1;
+  color: rgb(52 120 242);
+}
+
+.border-purple-600 {
+  --tw-border-opacity: 1;
+  border-color: rgb(52 120 242);
+}
+
+@keyframes toast-bar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+.animate-toast-bar {
+  animation: toast-bar 3s linear forwards;
+}
