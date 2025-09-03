@@ -146,7 +146,7 @@ export default function SuportePage() {
 
           <button
             type="submit"
-            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition"
           >
             Criar Ticket
           </button>
@@ -230,7 +230,7 @@ export default function SuportePage() {
                     {new Date(ticket.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4">
-                    <button className="text-purple-600 hover:text-purple-900">
+                    <button className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white font-semibold px-3 py-1 rounded transition">
                       Ver detalhes
                     </button>
                   </td>

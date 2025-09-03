@@ -307,7 +307,7 @@ export default function TicketDetalhes({ id }: Props) {
           setSelectedEmployee("");
           setShowAssignModal(true);
         }}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="px-4 py-2 rounded font-semibold bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white transition"
       >
         Atribuir Ticket
       </button>
@@ -319,7 +319,7 @@ export default function TicketDetalhes({ id }: Props) {
     if (!showAssignModal) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-lg p-6 max-w-md w-full">
           <h3 className="text-lg font-semibold mb-4">Atribuir Ticket</h3>
 
@@ -370,7 +370,7 @@ export default function TicketDetalhes({ id }: Props) {
                 setSelectedEmployee("");
                 setSelectedPrioridade("");
               }}
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+              className="px-4 py-2 text-sm font-medium rounded bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 hover:from-blue-200 hover:via-blue-300 hover:to-blue-400 text-blue-700 transition"
             >
               Cancelar
             </button>
@@ -380,7 +380,7 @@ export default function TicketDetalhes({ id }: Props) {
                 !selectedPrioridade ||
                 (user?.role === "admin" && !selectedEmployee)
               }
-              className="px-4 py-2 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm font-medium rounded bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Confirmar
             </button>
@@ -419,6 +419,7 @@ export default function TicketDetalhes({ id }: Props) {
     );
   };
 
+  // Botão de status (fechar/reabrir)
   const renderStatusButton = () => {
     if (!ticket || !user || user.role === "client") return null;
 
@@ -426,7 +427,7 @@ export default function TicketDetalhes({ id }: Props) {
       return (
         <button
           onClick={() => handleStatusChange("em_andamento")}
-          className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+          className="px-4 py-2 rounded font-semibold bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-300 hover:from-yellow-600 hover:via-yellow-500 hover:to-yellow-400 text-white transition"
         >
           Reabrir Ticket
         </button>
@@ -436,7 +437,7 @@ export default function TicketDetalhes({ id }: Props) {
     return (
       <button
         onClick={() => handleStatusChange("fechado")}
-        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        className="px-4 py-2 rounded font-semibold bg-gradient-to-r from-red-600 via-red-500 to-red-400 hover:from-red-700 hover:via-red-600 hover:to-red-500 text-white transition"
       >
         Fechar Ticket
       </button>
@@ -460,7 +461,7 @@ export default function TicketDetalhes({ id }: Props) {
           <p className="text-gray-600">Ticket não encontrado</p>
           <button
             onClick={() => router.push("/tickets")}
-            className="mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+            className="mt-4 px-4 py-2 rounded font-semibold bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white transition"
           >
             Voltar para Tickets
           </button>
@@ -560,7 +561,7 @@ export default function TicketDetalhes({ id }: Props) {
               <button
                 type="submit"
                 disabled={enviandoMensagem}
-                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:opacity-50"
+                className="px-4 py-2 rounded font-semibold bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white transition disabled:opacity-50"
               >
                 {enviandoMensagem ? "Enviando..." : "Enviar Mensagem"}
               </button>
