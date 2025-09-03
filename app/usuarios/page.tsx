@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import toast from "react-hot-toast";
@@ -349,13 +350,9 @@ export default function UsuariosPage() {
     }
   }, [veiculos, currentUser]);
 
-  const Map = React.useMemo(
-    () =>
-      require("next/dynamic")(
-        () => import("../configuracoes/rastreador/RastreadorMap"),
-        { ssr: false }
-      ),
-    []
+  const Map = dynamic(
+    () => import("../configuracoes/rastreador/RastreadorMap"),
+    { ssr: false }
   );
 
   // Render condicional: spinner global sempre antes de qualquer conteúdo

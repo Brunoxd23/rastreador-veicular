@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRef as useToastRef } from "react";
-import MapaTeste from "./MapaTeste";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { Html5QrcodeScanner } from "html5-qrcode";
