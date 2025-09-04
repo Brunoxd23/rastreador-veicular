@@ -12,61 +12,80 @@ export default function Footer() {
   if (!user) return null;
 
   return (
-    <footer className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 text-white mt-auto">
+    <footer className="bg-white mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Seção de Contato */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Entre em Contato</h3>
+            <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent">
+              Entre em Contato
+            </h3>
             <ul className="space-y-3">
               <li className="flex items-center">
                 <FiPhone className="mr-2" />
-                <span>(11) 9999-9999</span>
+                <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent">
+                  (11) 9999-9999
+                </span>
               </li>
               <li className="flex items-center">
                 <FiMail className="mr-2" />
                 <a
                   href="mailto:contato@empresa.com"
-                  className="hover:text-blue-200"
+                  className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent hover:text-blue-700"
                 >
                   contato@empresa.com
                 </a>
               </li>
               <li className="flex items-center">
                 <FiMapPin className="mr-2" />
-                <span>São Paulo, SP - Brasil</span>
+                <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent">
+                  São Paulo, SP - Brasil
+                </span>
               </li>
               <li className="flex items-center">
                 <FiClock className="mr-2" />
-                <span>Seg - Sex: 9h às 18h</span>
+                <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent">
+                  Seg - Sex: 9h às 18h
+                </span>
               </li>
             </ul>
           </div>
 
           {/* Links Rápidos */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Links Rápidos</h3>
+            <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent">
+              Links Rápidos
+            </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/tickets" className="hover:text-blue-200">
+                <Link
+                  href="/tickets"
+                  className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent hover:text-blue-700"
+                >
                   Suporte
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="hover:text-blue-200">
+                <Link
+                  href="/faq"
+                  className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent hover:text-blue-700"
+                >
                   FAQ
                 </Link>
               </li>
               <li>
                 <Link
                   href="/politica-privacidade"
-                  className="hover:text-blue-200"
+                  className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent hover:text-blue-700"
                 >
                   Política de Privacidade
                 </Link>
               </li>
               <li>
-                <Link href="/termos-uso" className="hover:text-blue-200">
+                <Link
+                  href="/termos-uso"
+                  className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent hover:text-blue-700"
+                >
                   Termos de Uso
                 </Link>
               </li>
@@ -75,8 +94,10 @@ export default function Footer() {
 
           {/* Sobre a Empresa */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Sobre Nós</h3>
-            <p className="text-blue-100 mb-4">
+            <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent">
+              Sobre Nós
+            </h3>
+            <p className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent mb-4">
               Somos especialistas em rastreamento veicular, oferecendo soluções
               inovadoras para garantir a segurança e eficiência da sua frota.
             </p>
@@ -127,7 +148,7 @@ export default function Footer() {
 
         {/* Direitos Reservados */}
         <div className="border-t border-blue-400 mt-8 pt-8 text-center">
-          <p className="text-sm text-blue-100">
+          <p className="text-sm bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 bg-clip-text text-transparent">
             © {currentYear} Sistema de Rastreamento. Todos os direitos
             reservados.
           </p>

@@ -14,7 +14,7 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
     return () => clearTimeout(timer);
   }, [onClose]);
   return (
-    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-4 py-2 rounded shadow-lg animate-fade-in">
+    <div className="fixed top-6 right-6 z-50 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white px-4 py-2 rounded shadow-lg animate-fade-in">
       {message}
     </div>
   );

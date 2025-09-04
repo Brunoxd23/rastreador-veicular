@@ -128,11 +128,7 @@ export default function Header() {
               <Link
                 key={item.path}
                 href={item.path}
-                className={`block pl-3 pr-4 py-2 text-base font-medium border-l-4 text-white hover:bg-blue-700 hover:border-blue-400 transition-colors ${
-                  pathname === item.path
-                    ? "border-blue-400 bg-blue-800"
-                    : "border-transparent"
-                }`}
+                className={`block pl-3 pr-4 py-2 text-base font-medium border-l-4 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 hover:text-white border-red-600 transition-colors`}
               >
                 {item.label}
               </Link>
