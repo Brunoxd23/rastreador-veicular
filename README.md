@@ -1,3 +1,71 @@
+## Diagrama de Fluxo do Banco de Dados
+
+```mermaid
+erDiagram
+   USUARIO ||--o{ VEICULO : possui
+   USUARIO ||--o{ TICKET : abre
+   USUARIO ||--o{ FATURA : recebe
+   USUARIO ||--o{ RASTREADOR : vincula
+   VEICULO ||--o{ RASTREADOR : instala
+   RASTREADOR ||--o{ POSICAO : envia
+   RASTREADOR ||--o{ LICENCA : gera
+   TICKET ||--o{ MENSAGEM : contém
+
+   USUARIO {
+      int id
+      string nome
+      string email
+      string tipo
+   }
+   VEICULO {
+      int id
+      string placa
+      string modelo
+      string marca
+      int ano
+   }
+   RASTREADOR {
+      int id
+      string modelo
+      string identificador
+      int vehicleId
+      int userId
+   }
+   POSICAO {
+      int id
+      string imei
+      float lat
+      float lng
+      datetime data
+   }
+   LICENCA {
+      int id
+      int rastreadorId
+      float valor
+      string status
+      datetime dataVencimento
+   }
+   TICKET {
+      int id
+      int userId
+      string assunto
+      string status
+   }
+   MENSAGEM {
+      int id
+      int ticketId
+      string texto
+      datetime data
+   }
+   FATURA {
+      int id
+      int userId
+      float valor
+      string status
+      datetime dataVencimento
+   }
+```
+
 # Sistema de Rastreamento Veicular
 
 Este projeto é um sistema completo de rastreamento e gestão de veículos, desenvolvido com Next.js, Prisma e PostgreSQL. Permite controle de usuários, tickets de suporte, faturas, veículos, notificações e autenticação segura.
@@ -15,12 +83,13 @@ Este projeto é um sistema completo de rastreamento e gestão de veículos, dese
 
 ## Tecnologias Utilizadas
 
-- Next.js (App Router)
-- Prisma ORM
-- PostgreSQL (Neon)
-- Tailwind CSS
-- JWT para autenticação
-- bcryptjs para hash de senhas
+Next.js (App Router)
+Prisma ORM
+PostgreSQL (Neon)
+Tailwind CSS
+JWT para autenticação
+bcryptjs para hash de senhas
+Twilio para envio de SMS
 
 ## Como rodar o projeto
 
@@ -55,6 +124,23 @@ Se for enviar comandos SMS para ativação do rastreador durante testes na rede 
 - Network: http://192.168.3.159:3000
 
 O IP de rede (Network) deve ser informado no campo de IP do servidor na ativação do chip M2, para que o rastreador consiga se comunicar corretamente com seu backend durante os testes.
+
+## Integração Twilio para envio de SMS
+
+O sistema está preparado para envio de comandos SMS via Twilio. Para ativar:
+
+1. Crie uma conta em [Twilio](https://www.twilio.com/).
+2. Obtenha seu Account SID, Auth Token e número de envio.
+3. Adicione as variáveis no arquivo `.env.local`:
+   ```env
+   TWILIO_ACCOUNT_SID=seu_account_sid
+   TWILIO_AUTH_TOKEN=seu_auth_token
+   TWILIO_PHONE_NUMBER=seu_numero_twilio
+   ```
+4. O endpoint `/api/send-sms` usará essas credenciais para enviar SMS para o número do chip M2.
+5. O frontend exibe o status do envio via toast.
+
+**Observação:** Para produção, utilize um número Twilio válido e configure limites de envio conforme sua conta.
 
 ## Estrutura de Pastas
 
@@ -157,6 +243,8 @@ Após ativação, o rastreador enviará sua posição para o backend, que será 
 ## Deploy
 
 Para deploy, recomenda-se o uso do [Vercel](https://vercel.com/) ou outro serviço compatível com Next.js e PostgreSQL.
+
+---
 
 ---
 
