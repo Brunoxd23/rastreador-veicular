@@ -14,7 +14,7 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
     return () => clearTimeout(timer);
   }, [onClose]);
   return (
-    <div className="fixed top-6 right-6 z-50 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white px-4 py-2 rounded shadow-lg animate-fade-in">
+    <div className="fixed top-4 right-2 z-50 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white px-3 py-2 rounded shadow-lg animate-fade-in text-sm max-w-xs w-full">
       {message}
     </div>
   );
@@ -256,11 +256,11 @@ export default function CadastroRastreador() {
           onClose={() => setShowToast(false)}
         />
       )}
-      <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
+      <div className="max-w-xl mx-auto mt-6 p-4 sm:p-6 bg-white rounded shadow">
         <button
           type="button"
           onClick={() => router.back()}
-          className="mb-4 bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 flex items-center gap-2"
+          className="mb-4 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white px-3 py-1.5 rounded font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 flex items-center gap-2 text-sm"
         >
           <svg
             className="w-4 h-4"
@@ -300,19 +300,19 @@ export default function CadastroRastreador() {
             </li>
           </ul>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {/* Botão para ativar chip após cadastro */}
           <button
             type="button"
-            className="w-full bg-green-700 text-white py-2 rounded font-bold mt-2"
+            className="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white py-1.5 rounded font-semibold mt-2 text-sm hover:from-blue-700 hover:via-blue-600 hover:to-blue-500"
             onClick={() => setShowAtivarChip(true)}
           >
             Enviar comandos de ativação manual
           </button>
           {/* Modal de ativação do chip */}
           {showAtivarChip && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-              <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full relative">
+            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 px-2">
+              <div className="bg-white rounded-xl shadow-lg p-2 sm:p-6 max-w-md w-full relative overflow-y-auto max-h-[80vh]">
                 {/* Aviso de ativação manual */}
                 <div className="mb-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-900 rounded">
                   <span className="font-semibold">Atenção:</span> O rastreador
@@ -321,7 +321,7 @@ export default function CadastroRastreador() {
                   ativo no rastreador.
                 </div>
                 <button
-                  className="mb-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  className="mb-2 px-3 py-1.5 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white rounded font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-sm"
                   onClick={() => buscarPosicao(identificador)}
                   type="button"
                 >
@@ -425,23 +425,25 @@ export default function CadastroRastreador() {
                 <h4 className="text-md font-semibold mb-2 mt-4">
                   Comandos para ativação:
                 </h4>
-                <div className="bg-gray-50 rounded p-3 text-sm font-mono text-gray-700 mb-2">
+                <div className="bg-gray-50 rounded p-2 sm:p-3 text-sm font-mono text-gray-700 mb-2">
                   {comandos.map((cmd, idx) => (
                     <div
                       key={idx}
-                      className="mb-2 flex flex-col md:flex-row md:items-center md:justify-between gap-2"
+                      className="mb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
                     >
-                      <span>{cmd}</span>
-                      <div className="flex gap-2">
+                      <span className="break-all text-xs sm:text-sm">
+                        {cmd}
+                      </span>
+                      <div className="flex gap-1 sm:gap-2">
                         <button
-                          className="px-2 py-1 text-xs bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200"
+                          className="px-2 py-1 text-xs bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-blue-700 rounded hover:from-blue-200 hover:via-blue-300 hover:to-blue-400 font-medium"
                           onClick={() => navigator.clipboard.writeText(cmd)}
                           type="button"
                         >
                           Copiar
                         </button>
                         <button
-                          className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
+                          className="px-2 py-1 text-xs bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white rounded font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500"
                           onClick={() => enviarSMS(cmd)}
                           type="button"
                           disabled={!chip || smsStatus === "Enviando..."}
@@ -452,18 +454,20 @@ export default function CadastroRastreador() {
                     </div>
                   ))}
                   {/* Botão RESET do rastreador */}
-                  <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                    <span className="font-bold text-red-600">RESET#</span>
-                    <div className="flex gap-2">
+                  <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <span className="font-bold text-red-600 text-xs sm:text-sm">
+                      RESET#
+                    </span>
+                    <div className="flex gap-1 sm:gap-2">
                       <button
-                        className="px-2 py-1 text-xs bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200"
+                        className="px-2 py-1 text-xs bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-blue-700 rounded hover:from-blue-200 hover:via-blue-300 hover:to-blue-400 font-medium"
                         onClick={() => navigator.clipboard.writeText("RESET#")}
                         type="button"
                       >
                         Copiar
                       </button>
                       <button
-                        className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200"
+                        className="px-2 py-1 text-xs bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white rounded font-semibold hover:from-red-700 hover:via-red-600 hover:to-red-500"
                         onClick={() => enviarSMS("RESET#")}
                         type="button"
                         disabled={!chip || smsStatus === "Enviando..."}
@@ -474,7 +478,7 @@ export default function CadastroRastreador() {
                   </div>
                 </div>
                 {smsStatus && (
-                  <div className="mt-2 text-sm text-center text-indigo-600">
+                  <div className="mt-2 text-xs sm:text-sm text-center text-blue-600 font-semibold">
                     {smsStatus}
                   </div>
                 )}
@@ -600,7 +604,7 @@ export default function CadastroRastreador() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded font-bold"
+            className="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white py-1.5 rounded font-semibold text-sm hover:from-blue-700 hover:via-blue-600 hover:to-blue-500"
             disabled={loading}
           >
             {loading ? "Cadastrando..." : "Cadastrar"}

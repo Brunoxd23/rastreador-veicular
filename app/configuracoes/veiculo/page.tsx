@@ -69,7 +69,7 @@ export default function CadastroVeiculo() {
         <button
           type="button"
           onClick={() => router.back()}
-          className="mb-4 bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 flex items-center gap-2"
+          className="mb-4 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white px-3 py-1.5 rounded font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 flex items-center gap-2 text-sm shadow"
         >
           <svg
             className="w-4 h-4"
@@ -146,7 +146,7 @@ export default function CadastroVeiculo() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded font-bold"
+            className="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white py-1.5 rounded font-semibold text-sm hover:from-blue-700 hover:via-blue-600 hover:to-blue-500"
             disabled={loading}
           >
             {loading ? "Cadastrando..." : "Cadastrar"}
