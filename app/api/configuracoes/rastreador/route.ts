@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { verifyJwtToken } from "@/lib/jwt";
 
@@ -54,15 +55,27 @@ export async function GET(req: NextRequest) {
 // Cadastro de rastreador, associação com veículo e usuário, e geração automática de licença
 export async function POST(req: NextRequest) {
   try {
+    // Verifica token JWT
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth_token");
+    if (!token?.value) {
+      return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+    }
+    const decoded = verifyJwtToken(token.value) as {
+      userId?: number | string;
+    } | null;
+    if (!decoded || !decoded.userId) {
+      return NextResponse.json({ error: "Token inválido" }, { status: 401 });
+    }
+    const userId =
+      typeof decoded.userId === "number"
+        ? decoded.userId
+        : Number(decoded.userId);
+
     const body = await req.json();
-    const {
-      modelo,
-      identificador,
-      vehicleId,
-      userId,
-      valorLicenca,
-      dataVencimento,
-    } = body;
+    const { modelo, identificador, vehicleId, valorLicenca, dataVencimento } =
+      body;
     // Validações robustas
     if (!modelo || typeof modelo !== "string" || modelo.length < 2) {
       return NextResponse.json({ error: "Modelo inválido." }, { status: 400 });
@@ -84,9 +97,6 @@ export async function POST(req: NextRequest) {
     }
     if (!vehicleId || typeof vehicleId !== "number") {
       return NextResponse.json({ error: "Veículo inválido." }, { status: 400 });
-    }
-    if (!userId || typeof userId !== "number") {
-      return NextResponse.json({ error: "Usuário inválido." }, { status: 400 });
     }
     if (
       !valorLicenca ||
@@ -113,13 +123,36 @@ export async function POST(req: NextRequest) {
         userId,
       },
     });
-    // Cria licença/fatura vinculada ao rastreador
+    // Cria licença (Licenca) do mês atual
+    const vencimentoAtual = new Date(dataVencimento);
     await prisma.licenca.create({
       data: {
         rastreadorId: rastreador.id,
         valor: valorLicenca,
         status: "pendente",
-        dataVencimento: new Date(dataVencimento),
+        dataVencimento: vencimentoAtual,
+      },
+    });
+    // Cria fatura do mês atual
+    await prisma.fatura.create({
+      data: {
+        userId,
+        rastreadorId: rastreador.id,
+        valor: valorLicenca,
+        status: "pendente",
+        dataVencimento: vencimentoAtual,
+      },
+    });
+    // Cria fatura do próximo mês
+    const vencimentoProximo = new Date(vencimentoAtual);
+    vencimentoProximo.setMonth(vencimentoProximo.getMonth() + 1);
+    await prisma.fatura.create({
+      data: {
+        userId,
+        rastreadorId: rastreador.id,
+        valor: valorLicenca,
+        status: "pendente",
+        dataVencimento: vencimentoProximo,
       },
     });
     return NextResponse.json({ success: true, rastreadorId: rastreador.id });

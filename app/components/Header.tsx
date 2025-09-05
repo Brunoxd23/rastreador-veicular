@@ -34,9 +34,11 @@ export default function Header() {
         { path: "/configuracoes", label: "Configurações" },
       ];
     } else {
+      // Cliente: exibe Financeiro também
       return [
         { path: "/dashboard", label: "Dashboard" },
         { path: "/meus-veiculos", label: "Meus Veículos" },
+        { path: "/financeiro", label: "Financeiro" },
         { path: "/tickets", label: "Suporte" },
       ];
     }

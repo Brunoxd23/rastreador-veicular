@@ -45,8 +45,34 @@ import { verify } from "jsonwebtoken";
 // GET - Listar veículos
 export async function GET(request: Request) {
   try {
-    // SEM AUTENTICAÇÃO: sempre retorna todos os veículos cadastrados
+    // Exige autenticação JWT
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth_token");
+    if (!token?.value) {
+      return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+    }
+    let userId;
+    let userRole = "client";
+    try {
+      const decoded = verify(token.value, process.env.JWT_SECRET || "") as {
+        userId: string | number;
+        role?: string;
+      };
+      console.log("[DEBUG] decoded JWT:", decoded);
+      userId =
+        typeof decoded.userId === "number"
+          ? decoded.userId
+          : Number(decoded.userId);
+      if (decoded.role) userRole = decoded.role;
+    } catch {
+      return NextResponse.json({ error: "Token inválido" }, { status: 401 });
+    }
+    let where = {};
+    if (userRole !== "admin") {
+      where = { userId };
+    }
     const vehicles = await prisma.vehicle.findMany({
+      where,
       select: {
         id: true,
         plate: true,
@@ -64,6 +90,16 @@ export async function GET(request: Request) {
       },
       orderBy: { createdAt: "desc" },
     });
+    console.log(
+      "[DEBUG] userRole:",
+      userRole,
+      "userId:",
+      userId,
+      "vehicles.length:",
+      vehicles.length,
+      "vehicles:",
+      vehicles
+    );
     return NextResponse.json({ success: true, vehicles });
   } catch (error) {
     return NextResponse.json(

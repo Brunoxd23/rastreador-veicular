@@ -603,13 +603,17 @@ export default function CadastroRastreador() {
           </div>
           <div>
             <label className="block font-medium">Valor da Licença</label>
-            <input
-              type="number"
+            <select
               value={valorLicenca}
               onChange={(e) => setValorLicenca(e.target.value)}
               className="w-full border rounded px-3 py-2"
               required
-            />
+            >
+              <option value="">Selecione o valor</option>
+              <option value="36">R$ 36,00</option>
+              <option value="45">R$ 45,00</option>
+              <option value="56">R$ 56,00</option>
+            </select>
           </div>
           <div>
             <label className="block font-medium">Data de Vencimento</label>

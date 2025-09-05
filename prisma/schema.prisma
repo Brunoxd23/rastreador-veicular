@@ -42,6 +42,7 @@ model Rastreador {
   vehicle      Vehicle  @relation(fields: [vehicleId], references: [id])
   user         User     @relation(fields: [userId], references: [id], name: "UserRastreadores")
   licencas     Licenca[]
+  faturas      Fatura[]
   posicoes     Posicao[]
 }
 
@@ -104,13 +105,15 @@ model Message {
 }
 
 model Fatura {
-  id          Int      @id @default(autoincrement())
-  valor       Float
-  status      String   @default("pendente") // "pendente", "pago", "cancelado"
-  dataEmissao DateTime @default(now())
+  id             Int         @id @default(autoincrement())
+  valor          Float
+  status         String      @default("pendente") // "pendente", "pago", "cancelado"
+  dataEmissao    DateTime    @default(now())
   dataVencimento DateTime
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id], name: "UserFaturas")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-} 
+  userId         Int
+  rastreadorId   Int
+  user           User        @relation(fields: [userId], references: [id], name: "UserFaturas")
+  rastreador     Rastreador  @relation(fields: [rastreadorId], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
