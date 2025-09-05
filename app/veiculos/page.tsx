@@ -5,10 +5,18 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Loading from "../components/Loading";
+import dynamic from "next/dynamic";
+const VeiculoHistoricoMap = dynamic(() => import("./VeiculoHistoricoMap"), {
+  ssr: false,
+});
 
 function VeiculosContent() {
   const [loading, setLoading] = useState(true);
   const [veiculos, setVeiculos] = useState<any[]>([]);
+  const [showHistorico, setShowHistorico] = useState<{
+    id: number;
+    plate: string;
+  } | null>(null);
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
   const router = useRouter();
@@ -82,7 +90,13 @@ function VeiculosContent() {
             <div className="text-red-600 mb-4">{error}</div>
           )}
           {veiculos.length === 0 && (!error || error === "Token inválido") ? (
-            <p className="text-gray-600">Nenhum veículo cadastrado.</p>
+            <div className="text-gray-600">
+              Nenhum veículo cadastrado.
+              <br />
+              <span className="text-xs text-red-500">
+                (Debug: veiculos.length = 0)
+              </span>
+            </div>
           ) : veiculos.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {veiculos.map((v) => (
@@ -122,6 +136,42 @@ function VeiculosContent() {
                       <span className="text-xs text-gray-500 ml-2">
                         ({v.user.email})
                       </span>
+                    </div>
+                  )}
+                  {/* Botões de ação */}
+                  <div className="flex gap-2 mt-4">
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded font-semibold text-sm hover:bg-blue-700 transition-colors">
+                      Atualizar posição
+                    </button>
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded font-semibold text-sm hover:bg-blue-600 transition-colors">
+                      Enviar comando
+                    </button>
+                    <button
+                      className="bg-gradient-to-r from-blue-400 via-blue-300 to-blue-200 text-blue-900 px-4 py-2 rounded font-semibold text-sm border border-blue-400 hover:from-blue-500 hover:via-blue-400 hover:to-blue-300"
+                      onClick={() =>
+                        setShowHistorico({ id: v.id, plate: v.plate })
+                      }
+                    >
+                      Mostrar histórico
+                    </button>
+                  </div>
+                  {/* Modal do histórico de posições - renderizado fora do loop */}
+                  {showHistorico && showHistorico.id === v.id && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 px-2">
+                      <div className="bg-white rounded-xl shadow-lg p-2 sm:p-6 max-w-2xl w-full relative overflow-y-auto max-h-[90vh]">
+                        <button
+                          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowHistorico(null)}
+                        >
+                          &times;
+                        </button>
+                        <h3 className="text-xl font-bold mb-4 text-blue-700">
+                          Histórico de posições - {showHistorico.plate}
+                        </h3>
+                        <div className="w-full h-96 mb-4">
+                          <VeiculoHistoricoMap veiculoId={showHistorico.id} />
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>

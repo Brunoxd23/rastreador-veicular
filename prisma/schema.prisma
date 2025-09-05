@@ -51,6 +51,7 @@ model Posicao {
   latitude      Float
   longitude     Float
   dataRecebida  DateTime @default(now())
+  bateria       Float?   // Valor real da bateria do rastreador
   rastreador    Rastreador @relation(fields: [rastreadorId], references: [id])
 }
 

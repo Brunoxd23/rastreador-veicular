@@ -46,6 +46,7 @@ export default function TicketsPage() {
   const [prioridade, setPrioridade] = useState("");
   const [filtroStatus, setFiltroStatus] = useState("");
   const [filtroPrioridade, setFiltroPrioridade] = useState("");
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const router = useRouter();
   const { user } = useAuth();
 
@@ -169,7 +170,6 @@ export default function TicketsPage() {
             {showForm ? "Cancelar" : "Novo Ticket"}
           </button>
         </div>
-
         {showForm && (
           <form
             onSubmit={handleSubmit}
@@ -353,17 +353,35 @@ export default function TicketsPage() {
                       <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
                         {new Date(ticket.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-center">
-                        <button
-                          key={`button-${ticket.id}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            router.push(`/tickets/${ticket.id}`);
-                          }}
-                          className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white px-3 py-1 rounded hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 transition"
-                        >
-                          Detalhes
-                        </button>
+                      <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-center flex flex-col sm:flex-row gap-2 justify-center items-center">
+                        <div className="w-full flex flex-col sm:flex-row gap-1 items-stretch">
+                          <button
+                            key={`button-${ticket.id}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              router.push(`/tickets/${ticket.id}`);
+                            }}
+                            className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white px-2 py-1 rounded w-full sm:w-auto text-xs font-semibold shadow hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 transition"
+                          >
+                            Detalhes
+                          </button>
+                          <button
+                            key={`delete-${ticket.id}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (user?.role !== "admin") {
+                                toast.error(
+                                  "Apenas administradores podem excluir tickets."
+                                );
+                                return;
+                              }
+                              setConfirmDeleteId(ticket.id);
+                            }}
+                            className="bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white px-2 py-1 rounded w-full sm:w-auto text-xs font-semibold shadow hover:from-red-700 hover:via-red-600 hover:to-red-500 transition"
+                          >
+                            Excluir
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -372,6 +390,43 @@ export default function TicketsPage() {
             </div>
           </div>
         </div>
+        {/* Toast de confirmação de exclusão */}
+        {confirmDeleteId && (
+          <div className="fixed bottom-6 right-6 z-[99999] bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-white px-4 py-3 rounded shadow-lg flex flex-col min-w-[220px]">
+            <span className="font-bold mb-2">
+              ⚠️ Atenção! Essa ação é irreversível.
+            </span>
+            <span className="mb-3">
+              Tem certeza que deseja excluir este ticket?
+            </span>
+            <div className="flex gap-2 justify-end">
+              <button
+                className="bg-white text-red-600 px-3 py-1 rounded font-semibold hover:bg-red-100 transition"
+                onClick={async () => {
+                  const res = await fetch(`/api/tickets/${confirmDeleteId}`, {
+                    method: "DELETE",
+                  });
+                  const data = await res.json();
+                  if (data.success) {
+                    toast.success("Ticket excluído com sucesso!");
+                    fetchTickets();
+                  } else {
+                    toast.error(data.error || "Erro ao excluir ticket");
+                  }
+                  setConfirmDeleteId(null);
+                }}
+              >
+                Excluir
+              </button>
+              <button
+                className="bg-white text-gray-800 px-3 py-1 rounded font-semibold hover:bg-gray-200 transition"
+                onClick={() => setConfirmDeleteId(null)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,3 +1,56 @@
+// DELETE - Excluir ticket
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const awaitedParams = await params;
+    const ticketId =
+      typeof awaitedParams.id === "string"
+        ? parseInt(awaitedParams.id, 10)
+        : awaitedParams.id;
+    if (isNaN(ticketId)) {
+      return NextResponse.json(
+        { success: false, error: "ID do ticket inválido" },
+        { status: 400 }
+      );
+    }
+    // Verificar se usuário é admin
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth_token");
+    if (!token) {
+      return NextResponse.json(
+        { success: false, error: "Não autorizado" },
+        { status: 401 }
+      );
+    }
+    const decoded = verify(token.value, process.env.JWT_SECRET || "") as {
+      userId: string;
+      role?: string;
+    };
+    const authenticatedUser = await prisma.user.findUnique({
+      where: { id: parseInt(decoded.userId, 10) },
+    });
+    if (!authenticatedUser || authenticatedUser.role !== "admin") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Apenas administradores podem excluir tickets",
+        },
+        { status: 403 }
+      );
+    }
+    // Excluir ticket no Prisma
+    await prisma.ticket.delete({ where: { id: ticketId } });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Erro ao excluir ticket:", error);
+    return NextResponse.json(
+      { success: false, error: "Erro ao excluir ticket" },
+      { status: 500 }
+    );
+  }
+}
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";

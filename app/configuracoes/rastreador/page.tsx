@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRef as useToastRef } from "react";
-import dynamic from "next/dynamic";
+// ...existing code...
 import { useRouter } from "next/navigation";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import Header from "../../components/Header";
@@ -20,8 +20,15 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
   );
 }
 import { QrCodeIcon } from "@heroicons/react/24/outline";
+import dynamic from "next/dynamic";
+const RastreadorHistoricoMap = dynamic(
+  () => import("./RastreadorHistoricoMap"),
+  { ssr: false }
+);
 
 export default function CadastroRastreador() {
+  // Estado para modal do histórico
+  const [showHistorico, setShowHistorico] = useState(false);
   // Ativação do chip
   const [showAtivarChip, setShowAtivarChip] = useState(false);
   const [chip, setChip] = useState("");
@@ -128,7 +135,10 @@ export default function CadastroRastreador() {
   // Verifica duplicidade no backend
   async function verificarDuplicidade(identificador: string) {
     if (!validarIdentificadorFormat(identificador)) return;
-    const token = localStorage.getItem("token");
+    let token = null;
+    if (typeof window !== "undefined") {
+      token = localStorage.getItem("token");
+    }
     const res = await fetch(
       `/api/configuracoes/rastreador?identificador=${identificador}`,
       {
@@ -155,7 +165,10 @@ export default function CadastroRastreador() {
       async function buscarPosicao(imei: string) {
         // Simulação: buscar posição pelo IMEI
         try {
-          const token = localStorage.getItem("token");
+          let token = null;
+          if (typeof window !== "undefined") {
+            token = localStorage.getItem("token");
+          }
           const res = await fetch(`/api/rastreador/posicao?imei=${imei}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -194,7 +207,10 @@ export default function CadastroRastreador() {
   async function buscarPosicao(imei: string) {
     // Simulação: buscar posição pelo IMEI
     try {
-      const token = localStorage.getItem("token");
+      let token = null;
+      if (typeof window !== "undefined") {
+        token = localStorage.getItem("token");
+      }
       const res = await fetch(`/api/rastreador/posicao?imei=${imei}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -302,13 +318,16 @@ export default function CadastroRastreador() {
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
           {/* Botão para ativar chip após cadastro */}
-          <button
-            type="button"
-            className="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white py-1.5 rounded font-semibold mt-2 text-sm hover:from-blue-700 hover:via-blue-600 hover:to-blue-500"
-            onClick={() => setShowAtivarChip(true)}
-          >
-            Enviar comandos de ativação manual
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white py-1.5 px-3 rounded font-semibold text-sm hover:from-blue-700 hover:via-blue-600 hover:to-blue-500"
+              onClick={() => setShowAtivarChip(true)}
+            >
+              Enviar comandos de ativação manual
+            </button>
+          </div>
+          {/* Modal do histórico de posições removido do admin */}
           {/* Modal de ativação do chip */}
           {showAtivarChip && (
             <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 px-2">

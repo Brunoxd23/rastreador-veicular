@@ -104,6 +104,11 @@ const Dashboard = () => {
     lng: number;
   }
   const [posicoes, setPosicoes] = useState<Record<string, Posicao>>({});
+  const [statusRastreador, setStatusRastreador] = useState<{
+    bateria: string;
+    ligado: boolean;
+    ultimaAtualizacao: string;
+  } | null>(null);
 
   // Replace all usages of 'user' with 'authUser' below
   useEffect(() => {
@@ -135,8 +140,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (authUser?.role === "client" && veiculos.length > 0) {
-      async function fetchPosicoes() {
+      async function fetchPosicoesEStatus() {
         const novas: any = {};
+        let status = null;
         for (const v of veiculos) {
           if (v.rastreadores && v.rastreadores.length > 0) {
             for (const r of v.rastreadores) {
@@ -147,13 +153,24 @@ const Dashboard = () => {
               if (data.success) {
                 novas[r.id] = { lat: data.lat, lng: data.lng };
               }
+              // Buscar status da bateria/ligado
+              if (!status) {
+                const resStatus = await fetch(
+                  `/api/rastreador/status?imei=${r.identificador}`
+                );
+                const dataStatus = await resStatus.json();
+                if (dataStatus.success && dataStatus.status) {
+                  status = dataStatus.status;
+                }
+              }
             }
           }
         }
         setPosicoes(novas);
+        setStatusRastreador(status);
       }
-      fetchPosicoes();
-      const interval = setInterval(fetchPosicoes, 10000);
+      fetchPosicoesEStatus();
+      const interval = setInterval(fetchPosicoesEStatus, 10000);
       return () => clearInterval(interval);
     }
   }, [authUser, veiculos]);
@@ -244,10 +261,11 @@ const Dashboard = () => {
                 Bloquear carro
               </button>
               <button
-                className="px-3 py-2 rounded bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 transition"
-                onClick={() => handleComando("desbloquear")}
+                className="flex items-center gap-1 px-3 py-1 rounded bg-gradient-to-r from-blue-400 via-blue-300 to-blue-200 text-blue-900 text-xs font-semibold border border-blue-400 hover:from-blue-500 hover:via-blue-400 hover:to-blue-300 shadow"
+                onClick={() => showToast("Mostrar histórico em breve")}
               >
-                Desbloquear carro
+                <FiFileText className="w-4 h-4" />
+                Mostrar histórico
               </button>
               <button
                 className="px-3 py-2 rounded bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 transition"
@@ -345,6 +363,55 @@ const Dashboard = () => {
                       )}
                     </div>
                   </div>
+                  {/* Status da bateria e ligado/desligado */}
+                  {statusRastreador && (
+                    <div className="mb-2 flex gap-4 items-center text-xs text-gray-600">
+                      <span className="flex items-center gap-1">
+                        <span className="text-lg">
+                          {(() => {
+                            const bateriaNum = parseFloat(
+                              statusRastreador.bateria
+                            );
+                            if (isNaN(bateriaNum)) return "🔋";
+                            if (bateriaNum >= 80) return "🔋";
+                            if (bateriaNum >= 40) return "🟨";
+                            return "🟥";
+                          })()}
+                        </span>
+                        <span className="font-bold text-green-700">
+                          {statusRastreador.bateria}
+                        </span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span className="text-lg">
+                          {statusRastreador.ligado ? "🟢" : "🔴"}
+                        </span>
+                        {statusRastreador.ligado ? (
+                          <span className="text-green-600 font-bold">
+                            Ligado
+                          </span>
+                        ) : (
+                          <span className="text-red-600 font-bold">
+                            Desligado
+                          </span>
+                        )}
+                      </span>
+                      <span>
+                        Atualizado:{" "}
+                        {statusRastreador.ultimaAtualizacao &&
+                        !["", "null", "undefined"].includes(
+                          String(statusRastreador.ultimaAtualizacao)
+                        ) &&
+                        new Date(
+                          statusRastreador.ultimaAtualizacao
+                        ).getFullYear() > 1970
+                          ? new Date(
+                              statusRastreador.ultimaAtualizacao
+                            ).toLocaleString()
+                          : "Sem atualização"}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex gap-2 mt-2">
                     <button
                       className="flex items-center gap-1 px-3 py-1 rounded bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white text-xs font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 transition disabled:opacity-50 shadow"
@@ -360,6 +427,13 @@ const Dashboard = () => {
                     >
                       <FiSend className="w-4 h-4" />
                       Enviar comando
+                    </button>
+                    <button
+                      className="flex items-center gap-1 px-3 py-1 rounded bg-gradient-to-r from-blue-400 via-blue-300 to-blue-200 text-blue-900 text-xs font-semibold border border-blue-400 hover:from-blue-500 hover:via-blue-400 hover:to-blue-300 shadow"
+                      onClick={() => showToast("Mostrar histórico em breve")}
+                    >
+                      <FiFileText className="w-4 h-4" />
+                      Mostrar histórico
                     </button>
                   </div>
                 </div>
