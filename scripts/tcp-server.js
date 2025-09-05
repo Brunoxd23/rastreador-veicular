@@ -2,7 +2,7 @@
 // Backend receptor de pacotes do rastreador via TCP
 
 const net = require("net");
-const PORT = process.env.RASTREADOR_TCP_PORT || 9000;
+const PORT = process.env.PORT || process.env.RASTREADOR_TCP_PORT || 9000;
 const { savePosicao } = require("./save-posicao");
 
 // Função exemplo para extrair dados do pacote (ajuste conforme modelo do rastreador)
