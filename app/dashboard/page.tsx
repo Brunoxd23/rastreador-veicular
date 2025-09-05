@@ -258,13 +258,18 @@ const Dashboard = () => {
                 className="px-3 py-2 rounded bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 transition"
                 onClick={() => handleComando("bloquear")}
               >
-                Bloquear carro
+                Bloquear veículo
               </button>
               <button
-                className="flex items-center gap-1 px-3 py-1 rounded bg-gradient-to-r from-blue-400 via-blue-300 to-blue-200 text-blue-900 text-xs font-semibold border border-blue-400 hover:from-blue-500 hover:via-blue-400 hover:to-blue-300 shadow"
+                className="px-3 py-2 rounded bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 transition"
+                onClick={() => handleComando("desbloquear")}
+              >
+                Desbloquear veículo
+              </button>
+              <button
+                className="px-3 py-2 rounded bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 transition"
                 onClick={() => showToast("Mostrar histórico em breve")}
               >
-                <FiFileText className="w-4 h-4" />
                 Mostrar histórico
               </button>
               <button
@@ -309,14 +314,14 @@ const Dashboard = () => {
           ) : (
             <div className="relative w-full h-[70vh] flex items-center justify-center rounded-lg shadow-md bg-white">
               <div className="w-full h-full">
-                {Map && Object.keys(posicoes).length > 0 ? (
+                {Map ? (
                   <Map
-                    lat={Object.values(posicoes)[0]?.lat || -15.7801}
-                    lng={Object.values(posicoes)[0]?.lng || -47.9292}
+                    lat={Object.values(posicoes)[0]?.lat ?? -23.64655}
+                    lng={Object.values(posicoes)[0]?.lng ?? -46.84985}
                   />
                 ) : (
                   <div className="text-gray-500 text-lg">
-                    Nenhuma posição encontrada
+                    Carregando mapa...
                   </div>
                 )}
               </div>
@@ -364,7 +369,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   {/* Status da bateria e ligado/desligado */}
-                  {statusRastreador && (
+                  {statusRastreador ? (
                     <div className="mb-2 flex gap-4 items-center text-xs text-gray-600">
                       <span className="flex items-center gap-1">
                         <span className="text-lg">
@@ -409,6 +414,12 @@ const Dashboard = () => {
                               statusRastreador.ultimaAtualizacao
                             ).toLocaleString()
                           : "Sem atualização"}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="mb-2 flex gap-4 items-center text-xs text-gray-500 italic">
+                      <span>
+                        Sem rastreador cadastrado ou sem dados de status.
                       </span>
                     </div>
                   )}

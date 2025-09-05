@@ -138,23 +138,6 @@ function VeiculosContent() {
                       </span>
                     </div>
                   )}
-                  {/* Botões de ação */}
-                  <div className="flex gap-2 mt-4">
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded font-semibold text-sm hover:bg-blue-700 transition-colors">
-                      Atualizar posição
-                    </button>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded font-semibold text-sm hover:bg-blue-600 transition-colors">
-                      Enviar comando
-                    </button>
-                    <button
-                      className="bg-gradient-to-r from-blue-400 via-blue-300 to-blue-200 text-blue-900 px-4 py-2 rounded font-semibold text-sm border border-blue-400 hover:from-blue-500 hover:via-blue-400 hover:to-blue-300"
-                      onClick={() =>
-                        setShowHistorico({ id: v.id, plate: v.plate })
-                      }
-                    >
-                      Mostrar histórico
-                    </button>
-                  </div>
                   {/* Modal do histórico de posições - renderizado fora do loop */}
                   {showHistorico && showHistorico.id === v.id && (
                     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 px-2">
