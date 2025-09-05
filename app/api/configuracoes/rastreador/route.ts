@@ -62,20 +62,22 @@ export async function POST(req: NextRequest) {
     if (!token?.value) {
       return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
     }
-    const decoded = verifyJwtToken(token.value) as {
-      userId?: number | string;
-    } | null;
-    if (!decoded || !decoded.userId) {
+    const decoded = verifyJwtToken(token.value);
+    if (!decoded) {
       return NextResponse.json({ error: "Token inválido" }, { status: 401 });
     }
-    const userId =
-      typeof decoded.userId === "number"
-        ? decoded.userId
-        : Number(decoded.userId);
-
     const body = await req.json();
-    const { modelo, identificador, vehicleId, valorLicenca, dataVencimento } =
-      body;
+    const {
+      modelo,
+      identificador,
+      vehicleId,
+      userId,
+      valorLicenca,
+      dataVencimento,
+    } = body;
+    if (!userId || typeof userId !== "number") {
+      return NextResponse.json({ error: "Usuário inválido." }, { status: 400 });
+    }
     // Validações robustas
     if (!modelo || typeof modelo !== "string" || modelo.length < 2) {
       return NextResponse.json({ error: "Modelo inválido." }, { status: 400 });

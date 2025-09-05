@@ -7,6 +7,12 @@ export async function POST(req: Request) {
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   const fromNumber = process.env.TWILIO_PHONE_NUMBER;
 
+  console.log("[DEBUG Twilio] Enviando SMS:", {
+    from: fromNumber,
+    to,
+    message,
+  });
+
   if (!accountSid || !authToken || !fromNumber) {
     return NextResponse.json(
       { success: false, error: "Twilio config missing" },
@@ -21,12 +27,14 @@ export async function POST(req: Request) {
       from: fromNumber,
       to,
     });
+    console.log("[DEBUG Twilio] SMS enviado! SID:", sms.sid);
     return NextResponse.json({
       success: true,
       sid: sms.sid,
       message: "SMS enviado com sucesso!",
     });
   } catch (error: any) {
+    console.error("[DEBUG Twilio] Erro ao enviar SMS:", error?.message, error);
     return NextResponse.json(
       { success: false, error: error?.message || "Erro ao enviar SMS" },
       { status: 500 }
