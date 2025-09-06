@@ -20,22 +20,49 @@ function parsePacote(mensagem) {
 }
 
 const server = net.createServer((socket) => {
+  const remoteAddress = socket.remoteAddress + ":" + socket.remotePort;
+  console.log(`[${new Date().toISOString()}] Nova conexão de ${remoteAddress}`);
+
   socket.on("data", async (data) => {
-    const mensagem = data.toString();
-    console.log("Pacote recebido:", mensagem);
-    // Salvar em arquivo para log
-    require("fs").appendFileSync("rastreador-log.txt", mensagem + "\n");
+    const mensagem = data.toString().trim();
+    const logMsg = `[${new Date().toISOString()}] Pacote de ${remoteAddress}: ${mensagem}`;
+    console.log(logMsg);
+    // Salvar todos os pacotes recebidos, mesmo inválidos
+    require("fs").appendFileSync("rastreador-log.txt", logMsg + "\n");
+
     // Extrair e salvar posição no banco
     const pos = parsePacote(mensagem);
     if (pos) {
-      await savePosicao(pos.identificador, pos.latitude, pos.longitude);
+      try {
+        await savePosicao(pos.identificador, pos.latitude, pos.longitude);
+        console.log(
+          `[${new Date().toISOString()}] Posição salva no banco:`,
+          pos
+        );
+      } catch (err) {
+        console.error(
+          `[${new Date().toISOString()}] Erro ao salvar posição:`,
+          err
+        );
+      }
     } else {
-      console.error("Pacote inválido:", mensagem);
+      console.warn(
+        `[${new Date().toISOString()}] Pacote inválido de ${remoteAddress}: ${mensagem}`
+      );
     }
   });
 
   socket.on("error", (err) => {
-    console.error("Erro no socket:", err);
+    console.error(
+      `[${new Date().toISOString()}] Erro no socket de ${remoteAddress}:`,
+      err
+    );
+  });
+
+  socket.on("close", () => {
+    console.log(
+      `[${new Date().toISOString()}] Conexão encerrada: ${remoteAddress}`
+    );
   });
 });
 
