@@ -70,20 +70,24 @@ function VeiculosContent() {
             Veículo cadastrado com sucesso!
           </div>
         )}
-        <div className="flex items-center space-x-4 mb-6">
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200"
-          >
-            ← Voltar
-          </button>
-          <h1 className="text-2xl font-bold">Meus Veículos</h1>
-          <button
-            onClick={() => router.push("/configuracoes/veiculo")}
-            className="ml-auto bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors"
-          >
-            + Novo Veículo
-          </button>
+        <div className="flex flex-col sm:flex-row items-center mb-6 gap-4 sm:gap-0">
+          <div className="flex items-center gap-4 flex-1">
+            <button
+              onClick={() => router.push("/dashboard")}
+              className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-md shadow hover:from-blue-600 hover:to-blue-800 transition"
+            >
+              ← Voltar
+            </button>
+            <h1 className="text-2xl font-bold">Meus Veículos</h1>
+          </div>
+          <div className="flex justify-end w-full sm:w-auto">
+            <button
+              onClick={() => router.push("/configuracoes/veiculo")}
+              className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-3 rounded-lg shadow font-semibold text-base hover:from-blue-600 hover:to-blue-800 transition"
+            >
+              + Novo Veículo
+            </button>
+          </div>
         </div>
         <div className="bg-white shadow rounded-lg p-6">
           {error && error !== "Token inválido" && (

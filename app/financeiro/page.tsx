@@ -45,6 +45,12 @@ export default function FinanceiroPage() {
     <div>
       <Header />
       <div className="p-8">
+        <button
+          onClick={() => window.history.back()}
+          className="mb-6 bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-md shadow hover:from-blue-600 hover:to-blue-800 transition"
+        >
+          ← Voltar
+        </button>
         <h1 className="text-2xl font-bold mb-6">Financeiro</h1>
         <div className="bg-white shadow rounded-lg p-6">
           {error && <div className="text-red-600 mb-4">{error}</div>}

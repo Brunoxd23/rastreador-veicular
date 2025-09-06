@@ -509,7 +509,7 @@ export default function UsuariosPage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             <button
               onClick={() => router.push("/dashboard")}
-              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 w-full sm:w-auto"
+              className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-md shadow hover:from-blue-600 hover:to-blue-800 transition w-full sm:w-auto"
             >
               ← Voltar
             </button>
@@ -530,7 +530,7 @@ export default function UsuariosPage() {
                 });
                 setShowForm(true);
               }}
-              className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 w-full sm:w-auto"
+              className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-md shadow hover:from-blue-600 hover:to-blue-800 transition w-full sm:w-auto"
             >
               Adicionar Usuário
             </button>
@@ -709,17 +709,46 @@ export default function UsuariosPage() {
                     {canEditUser(user) && (
                       <button
                         onClick={() => handleEdit(user)}
-                        className="text-purple-600 hover:text-purple-900 mr-4"
+                        className="mr-2 p-2 rounded hover:bg-blue-50 transition group"
+                        title="Editar usuário"
+                        aria-label="Editar usuário"
                       >
-                        Editar
+                        {/* Lucide Edit3 icon */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-5 h-5 text-blue-600 group-hover:text-blue-800"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={1.5}
+                        >
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                        </svg>
                       </button>
                     )}
                     {canDeleteUser(user) && (
                       <button
                         onClick={() => handleDelete(user.id, user.role)}
-                        className="text-red-600 hover:text-red-900"
+                        className="p-2 rounded hover:bg-red-50 transition group"
+                        title="Excluir usuário"
+                        aria-label="Excluir usuário"
                       >
-                        Excluir
+                        {/* Lucide Trash2 icon */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-5 h-5 text-red-600 group-hover:text-red-800"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={1.5}
+                        >
+                          <path d="M3 6h18" />
+                          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                          <path d="M10 11v6" />
+                          <path d="M14 11v6" />
+                        </svg>
                       </button>
                     )}
                   </td>
