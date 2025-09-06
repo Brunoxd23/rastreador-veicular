@@ -667,6 +667,9 @@ export default function UsuariosPage() {
                   </th>
                 )}
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Número de Celular
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Data de Criação
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -696,6 +699,9 @@ export default function UsuariosPage() {
                       </span>
                     </td>
                   )}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {(user as any).numeroCelular || "-"}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(user.createdAt).toLocaleDateString("pt-BR")}
                   </td>
