@@ -70,6 +70,7 @@ export async function POST(req: NextRequest) {
     const {
       modelo,
       identificador,
+      numeroChip,
       vehicleId,
       userId,
       valorLicenca,
@@ -116,11 +117,23 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+    // Validação do número do chip
+    if (
+      !numeroChip ||
+      typeof numeroChip !== "string" ||
+      numeroChip.length < 8
+    ) {
+      return NextResponse.json(
+        { error: "Número do chip inválido." },
+        { status: 400 }
+      );
+    }
     // Cria rastreador
     const rastreador = await prisma.rastreador.create({
       data: {
         modelo,
         identificador,
+        numeroChip,
         vehicleId,
         userId,
       },

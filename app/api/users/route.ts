@@ -58,6 +58,7 @@ export async function GET(request: Request) {
           id: true,
           name: true,
           email: true,
+          numeroCelular: true,
           role: true,
           createdAt: true,
         },
@@ -147,12 +148,14 @@ export async function POST(req: Request) {
           name: data.name,
           email: data.email,
           password: hashedPassword,
+          numeroCelular: data.numeroCelular,
           role: data.role,
         },
         select: {
           id: true,
           name: true,
           email: true,
+          numeroCelular: true,
           role: true,
           createdAt: true,
         },
@@ -272,6 +275,7 @@ export async function PUT(req: Request) {
       const updateData: any = {
         name: data.name,
         email: data.email,
+        numeroCelular: data.numeroCelular,
         updatedAt: new Date(),
       };
 
@@ -300,6 +304,7 @@ export async function PUT(req: Request) {
           id: true,
           name: true,
           email: true,
+          numeroCelular: true,
           role: true,
           createdAt: true,
         },

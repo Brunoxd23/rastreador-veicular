@@ -20,6 +20,7 @@ interface FormData {
   name: string;
   email: string;
   password: string;
+  numeroCelular: string;
   role: string;
 }
 
@@ -33,6 +34,7 @@ export default function UsuariosPage() {
     name: "",
     email: "",
     password: "",
+    numeroCelular: "",
     role: "client",
   });
 
@@ -108,6 +110,7 @@ export default function UsuariosPage() {
       name: user.name,
       email: user.email,
       password: "",
+      numeroCelular: (user as any).numeroCelular || "",
       role: user.role,
     });
     setShowForm(true);
@@ -173,7 +176,12 @@ export default function UsuariosPage() {
       // Se estiver editando e a senha estiver vazia, remove do payload
       const payload =
         editingUser && !formData.password
-          ? { name: formData.name, email: formData.email, role: formData.role }
+          ? {
+              name: formData.name,
+              email: formData.email,
+              numeroCelular: formData.numeroCelular,
+              role: formData.role,
+            }
           : formData;
 
       // Validações de permissão
@@ -213,7 +221,13 @@ export default function UsuariosPage() {
           { id: loadingToast }
         );
         setShowForm(false);
-        setFormData({ name: "", email: "", password: "", role: "client" });
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          numeroCelular: "",
+          role: "client",
+        });
         setEditingUser(null);
         await fetchUsers(); // Aguarda a atualização da lista
       } else {
@@ -511,6 +525,7 @@ export default function UsuariosPage() {
                   name: "",
                   email: "",
                   password: "",
+                  numeroCelular: "",
                   role: "client",
                 });
                 setShowForm(true);
@@ -540,6 +555,21 @@ export default function UsuariosPage() {
                     setFormData({ ...formData, name: e.target.value })
                   }
                   required
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Número de Celular
+                </label>
+                <input
+                  type="tel"
+                  value={formData.numeroCelular}
+                  onChange={(e) =>
+                    setFormData({ ...formData, numeroCelular: e.target.value })
+                  }
+                  required
+                  placeholder="(99) 99999-9999"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
                 />
               </div>
@@ -602,6 +632,7 @@ export default function UsuariosPage() {
                       name: "",
                       email: "",
                       password: "",
+                      numeroCelular: "",
                       role: "client",
                     });
                   }}
