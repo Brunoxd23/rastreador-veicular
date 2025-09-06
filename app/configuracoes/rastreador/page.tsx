@@ -81,6 +81,7 @@ export default function CadastroRastreador() {
   const [showToast, setShowToast] = useState(false);
   const Map = dynamic(() => import("./RastreadorMap"), { ssr: false });
   const [modelo, setModelo] = useState("");
+  const [numeroChip, setNumeroChip] = useState("");
   const [identificador, setIdentificador] = useState("");
   const [vehicleId, setVehicleId] = useState("");
   const [userId, setUserId] = useState("");
@@ -237,6 +238,7 @@ export default function CadastroRastreador() {
         },
         body: JSON.stringify({
           modelo,
+          numeroChip,
           identificador,
           vehicleId: Number(vehicleId),
           userId: Number(userId),
@@ -251,6 +253,7 @@ export default function CadastroRastreador() {
       setShowToast(true);
       buscarPosicao(identificador);
       setModelo("");
+      setNumeroChip("");
       setIdentificador("");
       setVehicleId("");
       setUserId("");
@@ -511,6 +514,19 @@ export default function CadastroRastreador() {
               value={modelo}
               onChange={(e) => setModelo(e.target.value)}
               className="w-full border rounded px-3 py-2"
+              required
+            />
+          </div>
+          <div>
+            <label className="block font-medium">
+              Número do Chip (com DDD)
+            </label>
+            <input
+              type="text"
+              value={numeroChip}
+              onChange={(e) => setNumeroChip(e.target.value)}
+              className="w-full border rounded px-3 py-2"
+              placeholder="Ex: +5511999999999"
               required
             />
           </div>

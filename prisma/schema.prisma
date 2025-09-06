@@ -34,7 +34,7 @@ model Rastreador {
   identificador String  @unique
   status       String   @default("ativo") // ativo, bloqueado
   tipoChip     String   @default("iot") // "iot" ou "convencional"
-  numeroChip   String?  // número do chip, se aplicável
+  numeroChip   String   // número do chip (obrigatório)
   vehicleId    Int
   userId       Int
   createdAt    DateTime @default(now())
