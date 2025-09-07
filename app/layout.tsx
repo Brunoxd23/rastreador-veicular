@@ -62,7 +62,10 @@ function AuthGate({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
-      <Footer />
+      {/* Footer acompanha sidebar */}
+      <div style={!isLogin ? { paddingLeft: sidebarWidth } : {}}>
+        <Footer />
+      </div>
       <Toaster
         position="top-right"
         toastOptions={{

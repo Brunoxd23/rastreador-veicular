@@ -80,7 +80,7 @@ export default function Sidebar({ onCollapse }: SidebarProps) {
     >
       {/* Botão de colapsar */}
       <button
-        className="absolute -right-3 top-4 bg-blue-100 border border-blue-300 rounded-full p-1 shadow hover:bg-blue-200 transition-colors z-40"
+        className="absolute -right-3 top-4 bg-blue-100 border border-blue-300 rounded-full p-0 shadow hover:bg-blue-200 transition-colors z-40"
         onClick={() => setCollapsed((c) => !c)}
         aria-label={collapsed ? "Expandir sidebar" : "Colapsar sidebar"}
         type="button"
@@ -123,7 +123,7 @@ export default function Sidebar({ onCollapse }: SidebarProps) {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className={`flex items-center gap-3 p-3 rounded-lg transition-colors group
+                className={`flex gap-3 p-3 rounded-lg transition-colors group justify-center items-center text-center
                   ${
                     pathname === item.href
                       ? "bg-blue-100 text-blue-700 font-semibold"
@@ -132,7 +132,9 @@ export default function Sidebar({ onCollapse }: SidebarProps) {
                 title={item.label}
               >
                 {item.icon}
-                {!collapsed && <span>{item.label}</span>}
+                {!collapsed && (
+                  <span className="block w-full text-center">{item.label}</span>
+                )}
               </Link>
             </li>
           ))}
