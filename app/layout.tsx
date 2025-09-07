@@ -29,7 +29,7 @@ export default function RootLayout({
 function AuthGate({ children }: { children: React.ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const pathname = usePathname();
-  const { loading } = useAuth();
+  const { loading, loadingLogout } = useAuth();
 
   // Função para passar para Sidebar controlar o estado
   const handleSidebarCollapse = (collapsed: boolean) => {
@@ -40,7 +40,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   const sidebarWidth = sidebarCollapsed ? 80 : 256;
   const isLogin = pathname === "/login";
 
-  if (loading) {
+  if (loading || loadingLogout) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <Loading />

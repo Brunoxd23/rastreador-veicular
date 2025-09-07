@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface User {
   id: string;
@@ -16,6 +16,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
+  loadingLogout: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,7 +24,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadingLogout, setLoadingLogout] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     checkAuth();
@@ -80,11 +83,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
+      setLoadingLogout(true);
       setUser(null);
       await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // delay extra de 1s
       router.replace("/login");
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
@@ -92,8 +97,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Garante que o loadingLogout seja desativado ao chegar na tela de login
+  useEffect(() => {
+    if (pathname === "/login" && loadingLogout) {
+      setLoadingLogout(false);
+    }
+  }, [pathname, loadingLogout]);
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, loading, loadingLogout }}
+    >
       {children}
     </AuthContext.Provider>
   );
