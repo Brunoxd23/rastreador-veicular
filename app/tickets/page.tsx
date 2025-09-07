@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
-import Header from "../components/Header";
 
 interface User {
   id: string;
@@ -148,18 +147,14 @@ export default function TicketsPage() {
 
   if (loading) {
     return (
-      <div>
-        <Header />
-        <div className="container mx-auto px-4 py-8">
-          <p></p>
-        </div>
+      <div className="container mx-auto px-4 py-8">
+        <p></p>
       </div>
     );
   }
 
   return (
     <div>
-      <Header />
       <div className="container mx-auto px-4 py-4 sm:py-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
           <h1 className="text-xl sm:text-2xl font-bold">Tickets</h1>

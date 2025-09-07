@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import Loading from "../components/Loading";
 
 export default function ConfiguracoesPage() {
@@ -20,7 +20,6 @@ export default function ConfiguracoesPage() {
 
   return (
     <div>
-      <Header />
       <div className="p-8">
         <div className="flex items-center space-x-4 mb-6">
           <button

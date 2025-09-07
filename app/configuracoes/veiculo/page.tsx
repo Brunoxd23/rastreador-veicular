@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Header from "../../components/Header";
 
 export default function CadastroVeiculo() {
   const [plate, setPlate] = useState("");
@@ -64,7 +63,6 @@ export default function CadastroVeiculo() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
         <button
           type="button"

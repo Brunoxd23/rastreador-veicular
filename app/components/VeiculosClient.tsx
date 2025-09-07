@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
 import Loading from "./Loading";
 
 interface Veiculo {
@@ -45,7 +44,6 @@ const VeiculosClient: React.FC<VeiculosClientProps> = ({ userId }) => {
 
   return (
     <div>
-      <Header />
       <div className="p-8">
         <h2 className="text-2xl font-bold mb-6">Meus Veículos</h2>
         {loading ? (

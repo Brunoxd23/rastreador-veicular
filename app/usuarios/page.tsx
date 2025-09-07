@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import Header from "../components/Header";
 import toast from "react-hot-toast";
 import Loading from "../components/Loading";
 import { useAuth } from "../contexts/AuthContext";
@@ -389,7 +388,6 @@ export default function UsuariosPage() {
     }
     return (
       <div>
-        <Header />
         <div className="p-8">
           <h2 className="text-2xl font-bold mb-6">Meus Veículos</h2>
           {errorVeiculos ? (
@@ -503,7 +501,6 @@ export default function UsuariosPage() {
 
   return (
     <div>
-      <Header />
       <div className="p-4 sm:p-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">

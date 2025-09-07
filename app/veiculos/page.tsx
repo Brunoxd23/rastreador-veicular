@@ -3,7 +3,6 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import Header from "../components/Header";
 import Loading from "../components/Loading";
 import dynamic from "next/dynamic";
 const VeiculoHistoricoMap = dynamic(() => import("./VeiculoHistoricoMap"), {
@@ -63,7 +62,6 @@ function VeiculosContent() {
 
   return (
     <div>
-      <Header />
       <div className="p-8">
         {showToast && (
           <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded shadow-lg animate-fade-in">

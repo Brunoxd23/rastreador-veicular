@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { toast } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'funcionario' | 'client';
+  role: "admin" | "funcionario" | "client";
 }
 
 interface AuthContextType {
@@ -31,8 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('/api/auth/check', {
-        credentials: 'include'
+      const response = await fetch("/api/auth/check", {
+        credentials: "include",
       });
       const data = await response.json();
 
@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(null);
       }
     } catch (error) {
-      console.error('Erro ao verificar autenticação:', error);
+      console.error("Erro ao verificar autenticação:", error);
       setUser(null);
     } finally {
       setLoading(false);
@@ -51,10 +51,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
@@ -62,18 +62,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error(data.message || 'Erro ao fazer login');
+        throw new Error(data.message || "Erro ao fazer login");
       }
 
       if (!data.user || !data.user.name || !data.user.id || !data.user.role) {
-        console.error('Dados do usuário incompletos:', data.user);
-        throw new Error('Erro ao obter dados do usuário');
+        console.error("Dados do usuário incompletos:", data.user);
+        throw new Error("Erro ao obter dados do usuário");
       }
 
       setUser(data.user);
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
+      console.error("Erro ao fazer login:", error);
       throw error;
     }
   };
@@ -81,14 +81,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       setUser(null);
-      await fetch('/api/auth/logout', { 
-        method: 'POST',
-        credentials: 'include'
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
       });
-      router.replace('/login');
+      router.replace("/login");
     } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-      toast.error('Erro ao fazer logout');
+      console.error("Erro ao fazer logout:", error);
+      toast.error("Erro ao fazer logout");
     }
   };
 
@@ -102,7 +102,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+    throw new Error("useAuth deve ser usado dentro de um AuthProvider");
   }
   return context;
-} 
+}

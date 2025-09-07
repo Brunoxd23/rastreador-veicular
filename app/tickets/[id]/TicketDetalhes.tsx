@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 import { useTicketNotifications } from "../../hooks/useTicketNotifications";
+import TopHeader from "../../components/TopHeader";
 
 interface User {
   id: string;
@@ -89,8 +90,6 @@ const formatDate = (date: Date | string) => {
 };
 
 export default function TicketDetalhes({ id }: Props) {
-  // Importa o Header
-  const Header = require("../../components/Header").default;
   const router = useRouter();
   const { user } = useAuth();
   const { markMessagesAsViewed } = useTicketNotifications();
@@ -472,7 +471,7 @@ export default function TicketDetalhes({ id }: Props) {
 
   return (
     <>
-      <Header />
+      <TopHeader />
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex justify-between items-start mb-4">

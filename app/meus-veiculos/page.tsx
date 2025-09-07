@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
 import Loading from "../components/Loading";
 
@@ -60,7 +59,6 @@ const MeusVeiculos = () => {
 
   return (
     <div>
-      <Header />
       <main className="p-6">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">
           Meus Veículos

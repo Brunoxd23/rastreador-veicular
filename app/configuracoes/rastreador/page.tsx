@@ -5,7 +5,6 @@ import { useRef as useToastRef } from "react";
 // ...existing code...
 import { useRouter } from "next/navigation";
 import { Html5QrcodeScanner } from "html5-qrcode";
-import Header from "../../components/Header";
 import Loading from "../../components/Loading";
 // Toast notification
 function Toast({ message, onClose }: { message: string; onClose: () => void }) {
@@ -268,7 +267,6 @@ export default function CadastroRastreador() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       {showToast && (
         <Toast
           message="Rastreador cadastrado com sucesso!"

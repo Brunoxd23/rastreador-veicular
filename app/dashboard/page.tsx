@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Header from "../components/Header";
 import {
   FiUsers,
   FiTruck,
@@ -234,7 +233,6 @@ const Dashboard = () => {
 
   return (
     <>
-      <Header />
       <main className="p-0 md:p-6">
         {/* Toast de feedback */}
         {toast.visible && (

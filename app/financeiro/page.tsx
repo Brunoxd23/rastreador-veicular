@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
 import Loading from "../components/Loading";
 
 export default function FinanceiroPage() {
@@ -43,7 +42,6 @@ export default function FinanceiroPage() {
 
   return (
     <div>
-      <Header />
       <div className="p-8">
         <button
           onClick={() => window.history.back()}

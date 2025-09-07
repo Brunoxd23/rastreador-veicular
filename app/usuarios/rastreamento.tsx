@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import Header from "../components/Header";
 
 const Map = dynamic(() => import("../configuracoes/rastreador/RastreadorMap"), {
   ssr: false,
@@ -86,7 +85,6 @@ export default function RastreamentoCliente() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded shadow">
         <h2 className="text-2xl font-bold mb-6">
           Meus Veículos e Rastreamentos
