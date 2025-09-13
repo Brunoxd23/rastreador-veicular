@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-hot-toast";
+import DateCell from "./DateCell";
 
 export default function SuportePage() {
   const { user } = useAuth();
@@ -227,7 +228,7 @@ export default function SuportePage() {
                     {ticket.assignee?.name || "Não atribuído"}
                   </td>
                   <td className="px-6 py-4">
-                    {new Date(ticket.createdAt).toLocaleDateString()}
+                    <DateCell date={ticket.createdAt} />
                   </td>
                   <td className="px-6 py-4">
                     <button className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white font-semibold px-3 py-1 rounded transition">

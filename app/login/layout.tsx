@@ -1,9 +1,10 @@
+"use client";
 import { Toaster } from "react-hot-toast";
-import { AuthProvider } from "./contexts/AuthContext";
-import ClientWrapper from "./components/ClientWrapper";
-import "./globals.css";
+import Footer from "../components/Footer";
+import TopHeader from "../components/TopHeader";
+import "../globals.css";
 
-export default function RootLayout({
+export default function LoginLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -11,9 +12,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="min-h-screen flex flex-col bg-gray-100">
-        <AuthProvider>
-          <ClientWrapper>{children}</ClientWrapper>
-        </AuthProvider>
+        <TopHeader sidebarCollapsed={false} />
+        <main className="flex-1 min-w-0 transition-all duration-300 w-full">
+          {children}
+        </main>
+        <Footer />
         <Toaster
           position="top-right"
           toastOptions={{

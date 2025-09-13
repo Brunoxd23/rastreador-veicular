@@ -6,6 +6,7 @@ import {
   Polyline,
   Popup,
 } from "react-leaflet";
+import DateCell from "../../suporte/DateCell";
 import "leaflet/dist/leaflet.css";
 
 interface Posicao {
@@ -72,7 +73,7 @@ export default function RastreadorHistoricoMap({
           <Popup>
             <div>
               <div>
-                <b>Data:</b> {new Date(p.data).toLocaleString()}
+                <b>Data:</b> <DateCell date={p.data} />
               </div>
               {p.endereco && (
                 <div>

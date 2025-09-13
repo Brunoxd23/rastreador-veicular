@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Loading from "../components/Loading";
 import { useAuth } from "../contexts/AuthContext";
+import DateCell from "../suporte/DateCell";
 
 interface User {
   id: string;
@@ -700,7 +701,7 @@ export default function UsuariosPage() {
                     {(user as any).numeroCelular || "-"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(user.createdAt).toLocaleDateString("pt-BR")}
+                    <DateCell date={user.createdAt} />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     {canEditUser(user) && (
