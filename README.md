@@ -99,8 +99,8 @@ Twilio para envio de SMS
    ```
 2. Configure o banco de dados em `.env` e `.env.local`:
    ```env
-   DATABASE_URL=postgresql://<usuario>:<senha>@<host>/<database>?sslmode=require
-   JWT_SECRET=<sua-chave-secreta>
+   DATABASE_URL=postgresql://neondb_owner:npg_zh1bOvQ5RLBD@ep-floral-night-adqd56a0-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+   JWT_SECRET=b0546f5fe247353bc412e3eb4289654aeb8441e0ca2ef969a662d616e0e4b6d2e29bdb0bc46f294ddc694e4f7d9fcd953f701fc3f1f9a5aa2e40c11928e71cfe
    ```
 3. Execute as migrações do Prisma:
    ```bash
