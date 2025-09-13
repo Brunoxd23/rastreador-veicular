@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 import { useTicketNotifications } from "../../hooks/useTicketNotifications";
-import TopHeader from "../../components/TopHeader";
 
 interface User {
   id: string;
@@ -463,108 +462,105 @@ export default function TicketDetalhes({ id }: Props) {
   }
 
   return (
-    <>
-      <TopHeader />
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="flex justify-between items-start mb-4">
-            <h1 className="text-2xl font-bold text-gray-800">{ticket.title}</h1>
-            <div className="flex gap-2">
-              {renderStatusButton()}
-              {renderAssignButton()}
-            </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="flex justify-between items-start mb-4">
+          <h1 className="text-2xl font-bold text-gray-800">{ticket.title}</h1>
+          <div className="flex gap-2">
+            {renderStatusButton()}
+            {renderAssignButton()}
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <p className="text-sm text-gray-600">Criado por</p>
-              <p className="font-medium">{ticket.user.name}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Data de criação</p>
-              <p className="font-medium">
-                <DateCell date={ticket.createdAt} />
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Status</p>
-              <p className="font-medium">{formatStatus(ticket.status)}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Prioridade</p>
-              <p className="font-medium">{formatPriority(ticket.priority)}</p>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <p className="text-sm text-gray-600">Criado por</p>
+            <p className="font-medium">{ticket.user.name}</p>
           </div>
-
-          <div className="mb-6">
-            <p className="text-sm text-gray-600 mb-2">Descrição</p>
-            <p className="text-gray-800 whitespace-pre-wrap">
-              {ticket.description}
+          <div>
+            <p className="text-sm text-gray-600">Data de criação</p>
+            <p className="font-medium">
+              <DateCell date={ticket.createdAt} />
             </p>
           </div>
-
-          {renderAssignmentStatus()}
+          <div>
+            <p className="text-sm text-gray-600">Status</p>
+            <p className="font-medium">{formatStatus(ticket.status)}</p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600">Prioridade</p>
+            <p className="font-medium">{formatPriority(ticket.priority)}</p>
+          </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Mensagens</h2>
-          <div className="space-y-4 mb-6">
-            {(ticket.messages ?? []).length === 0 ? (
-              <p className="text-gray-500">Nenhuma mensagem ainda.</p>
-            ) : (
-              (ticket.messages ?? []).map((message) => (
-                <div
-                  key={message.id}
-                  className={`p-4 rounded-lg ${
-                    message.userId === user?.id
-                      ? "bg-purple-50 ml-8"
-                      : "bg-gray-50 mr-8"
-                  }`}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <p className="font-medium text-sm">{message.user.name}</p>
-                    <p className="text-xs text-gray-500">
-                      <DateCell date={message.data} />
-                    </p>
-                  </div>
-                  <p className="text-gray-800 whitespace-pre-wrap">
-                    {message.content}
+        <div className="mb-6">
+          <p className="text-sm text-gray-600 mb-2">Descrição</p>
+          <p className="text-gray-800 whitespace-pre-wrap">
+            {ticket.description}
+          </p>
+        </div>
+
+        {renderAssignmentStatus()}
+      </div>
+
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-semibold mb-4">Mensagens</h2>
+        <div className="space-y-4 mb-6">
+          {(ticket.messages ?? []).length === 0 ? (
+            <p className="text-gray-500">Nenhuma mensagem ainda.</p>
+          ) : (
+            (ticket.messages ?? []).map((message) => (
+              <div
+                key={message.id}
+                className={`p-4 rounded-lg ${
+                  message.userId === user?.id
+                    ? "bg-purple-50 ml-8"
+                    : "bg-gray-50 mr-8"
+                }`}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <p className="font-medium text-sm">{message.user.name}</p>
+                  <p className="text-xs text-gray-500">
+                    <DateCell date={message.data} />
                   </p>
                 </div>
-              ))
-            )}
-          </div>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="mensagem"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Nova Mensagem
-              </label>
-              <textarea
-                id="mensagem"
-                value={mensagem}
-                onChange={(e) => setMensagem(e.target.value)}
-                className="w-full p-3 border rounded-md"
-                rows={4}
-                required
-              />
-            </div>
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={enviandoMensagem}
-                className="px-4 py-2 rounded font-semibold bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white transition disabled:opacity-50"
-              >
-                {enviandoMensagem ? "Enviando..." : "Enviar Mensagem"}
-              </button>
-            </div>
-          </form>
+                <p className="text-gray-800 whitespace-pre-wrap">
+                  {message.content}
+                </p>
+              </div>
+            ))
+          )}
         </div>
-
-        {renderAssignModal()}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="mensagem"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Nova Mensagem
+            </label>
+            <textarea
+              id="mensagem"
+              value={mensagem}
+              onChange={(e) => setMensagem(e.target.value)}
+              className="w-full p-3 border rounded-md"
+              rows={4}
+              required
+            />
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={enviandoMensagem}
+              className="px-4 py-2 rounded font-semibold bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white transition disabled:opacity-50"
+            >
+              {enviandoMensagem ? "Enviando..." : "Enviar Mensagem"}
+            </button>
+          </div>
+        </form>
       </div>
-    </>
+
+      {renderAssignModal()}
+    </div>
   );
 }
