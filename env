@@ -1,0 +1,8 @@
+DATABASE_URL=postgresql://neondb_owner:npg_zh1bOvQ5RLBD@ep-floral-night-adqd56a0-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+EMAIL_USER=devtoolsprogramador@gmail.com
+EMAIL_PASS=wzbloccytvnnrgof
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+JWT_SECRET=b0546f5fe247353bc412e3eb4289654aeb8441e0ca2ef969a662d616e0e4b6d2e29bdb0bc46f294ddc694e4f7d9fcd953f701fc3f1f9a5aa2e40c11928e71cfe
+TWILIO_ACCOUNT_SID=ACeb7ebb78e89e307c0ec12d413c1af058
+TWILIO_AUTH_TOKEN=b3070b7bedf96ec3e3ba789bd4e0a645
+TWILIO_PHONE_NUMBER=+16782525501
