@@ -7,6 +7,7 @@ import {
   Popup,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import DateCell from "./DateCell";
 
 interface Posicao {
   lat: number;
@@ -73,7 +74,7 @@ export default function VeiculoHistoricoMap({
           <Popup>
             <div>
               <div>
-                <b>Data:</b> {new Date(p.data).toLocaleString()}
+                <b>Data:</b> <DateCell date={p.data} />
               </div>
               {p.endereco && (
                 <div>

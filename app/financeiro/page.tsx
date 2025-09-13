@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import DateCell from "../suporte/DateCell";
 import Loading from "../components/Loading";
 
 export default function FinanceiroPage() {
@@ -122,7 +123,7 @@ export default function FinanceiroPage() {
                           R$ {l.valor.toFixed(2)}
                         </td>
                         <td className="px-2 py-2 whitespace-nowrap font-semibold text-purple-700">
-                          {new Date(l.dataVencimento).toLocaleDateString()}
+                          <DateCell date={l.dataVencimento} />
                         </td>
                         <td
                           className={`px-2 py-2 font-bold whitespace-nowrap ${statusClass}`}

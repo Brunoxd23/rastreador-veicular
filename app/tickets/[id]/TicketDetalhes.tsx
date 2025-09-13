@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import DateCell from "../../suporte/DateCell";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
@@ -79,15 +80,7 @@ const formatPriority = (priority: string) => {
   }
 };
 
-const formatDate = (date: Date | string) => {
-  return new Date(date).toLocaleString("pt-BR", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
+// Removido formatDate para evitar hidratação
 
 export default function TicketDetalhes({ id }: Props) {
   const router = useRouter();
@@ -489,7 +482,9 @@ export default function TicketDetalhes({ id }: Props) {
             </div>
             <div>
               <p className="text-sm text-gray-600">Data de criação</p>
-              <p className="font-medium">{formatDate(ticket.createdAt)}</p>
+              <p className="font-medium">
+                <DateCell date={ticket.createdAt} />
+              </p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Status</p>
@@ -529,7 +524,7 @@ export default function TicketDetalhes({ id }: Props) {
                   <div className="flex justify-between items-start mb-2">
                     <p className="font-medium text-sm">{message.user.name}</p>
                     <p className="text-xs text-gray-500">
-                      {formatDate(message.data)}
+                      <DateCell date={message.data} />
                     </p>
                   </div>
                   <p className="text-gray-800 whitespace-pre-wrap">

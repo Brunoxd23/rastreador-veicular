@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import DateCell from "../suporte/DateCell";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
@@ -346,7 +347,7 @@ export default function TicketsPage() {
                         {ticket.assignee?.name || "Não atribuído"}
                       </td>
                       <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
-                        {new Date(ticket.createdAt).toLocaleDateString()}
+                        <DateCell date={ticket.createdAt} />
                       </td>
                       <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-center flex flex-col sm:flex-row gap-2 justify-center items-center">
                         <div className="w-full flex flex-col sm:flex-row gap-1 items-stretch">

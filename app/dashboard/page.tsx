@@ -11,6 +11,7 @@ import {
 } from "react-icons/fi";
 import { useAuth } from "../contexts/AuthContext";
 import Loading from "../components/Loading";
+import DateCell from "../suporte/DateCell";
 
 interface DashboardStats {
   totalUsers: number;
@@ -407,11 +408,11 @@ const Dashboard = () => {
                         ) &&
                         new Date(
                           statusRastreador.ultimaAtualizacao
-                        ).getFullYear() > 1970
-                          ? new Date(
-                              statusRastreador.ultimaAtualizacao
-                            ).toLocaleString()
-                          : "Sem atualização"}
+                        ).getFullYear() > 1970 ? (
+                          <DateCell date={statusRastreador.ultimaAtualizacao} />
+                        ) : (
+                          "Sem atualização"
+                        )}
                       </span>
                     </div>
                   ) : (
