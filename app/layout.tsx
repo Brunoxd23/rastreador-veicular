@@ -28,7 +28,7 @@ export default function RootLayout({
             success: {
               duration: 3000,
               iconTheme: {
-                primary: "#4CAF51",
+                primary: "#4CAF50",
                 secondary: "#fff",
               },
             },
