@@ -98,11 +98,13 @@ Twilio para envio de SMS
    npm install
    ```
 2. Configure o banco de dados em `.env` e `.env.local`:
+
    ```env
    DATABASE_URL=
    JWT_SECRET=
 
    ```
+
 3. Execute as migrações do Prisma:
    ```bash
    npx prisma migrate dev --name init
@@ -198,6 +200,67 @@ Para ativar e configurar o rastreador (chip M2), envie os comandos abaixo via SM
   `APN,zap.vivo.com.br,vivo,vivo#`
 - Configurar IP/porta do servidor:
   `SERVER,0,IP_DO_SEU_SERVIDOR,9000,0#`
+
+## Navegação Mobile e Mapa Responsivo
+
+Foi adicionada uma navegação inferior exclusiva para dispositivos móveis (`MobileBottomNav`) com as rotas principais do cliente:
+
+- Dashboard
+- Meus Veículos
+- Financeiro
+- Suporte (Tickets)
+
+Características:
+
+- O componente aparece somente para usuários autenticados quando a largura é `<768px`.
+- O `Sidebar` tradicional é ocultado em telas pequenas para liberar espaço.
+- O conteúdo principal recebe `padding-bottom` para não ficar sob a barra.
+- Cada item exibe um indicador visual (barra azul) quando ativo.
+
+### Mapa Full-Screen Mobile
+
+Nas páginas `Meus Veículos` e `Usuarios/Rastreamento`, ao selecionar um rastreador em dispositivos móveis, o mapa abre em modo tela cheia com:
+
+- Header compacto com botão "Voltar".
+- Informações do rastreador (modelo e IMEI).
+- Botões de ação (placeholders: Centralizar e Histórico) posicionados sobre o mapa, prontos para futuras funcionalidades.
+
+Essa abordagem melhora a usabilidade em telas pequenas mantendo a mesma base de componentes do desktop.
+
+### Dashboard: Mapa Fullscreen + Card Arrastável (Mobile)
+
+No `Dashboard` (quando o usuário é cliente), o mapa agora possui um modo fullscreen focado apenas na área do mapa:
+
+- Botão de expandir (ícone de cantos) aparece no canto superior direito apenas em telas <768px.
+- Ao entrar em fullscreen, o `body` recebe `data-fullscreen="map"` permitindo ocultar elementos externos via CSS (ex: bottom nav) se desejado.
+- O card de informações do veículo fica sobreposto na parte inferior e pode ser arrastado verticalmente (drag touch/mouse) quando em fullscreen.
+- Snap automático em três alturas (baixa, média, alta) para melhorar a usabilidade.
+- Fora do fullscreen, o card permanece fixo em posição confortável acima da navegação inferior.
+- O mapa continua atualizando a posição e status do rastreador periodicamente.
+
+Benefícios:
+
+- Melhor aproveitamento de espaço em dispositivos pequenos.
+- Interação semelhante a painéis modernos de apps de mobilidade (ex: pane deslizável sobre mapa).
+- Código preparado para futuras ações (histórico, comandos adicionais, centralizar mapa).
+
+Próximas melhorias sugeridas (não implementadas ainda):
+
+- Animação de suavização ao arrastar (spring physics).
+- Botão de centralizar última posição dentro do overlay superior.
+- Exibição de múltiplos veículos com seleção dentro do card expansível.
+
+Estrutura principal envolvida: `app/dashboard/page.tsx`.
+
+### TopHeader Mobile
+
+O cabeçalho agora possui duas versões:
+
+- Desktop: mostra data extensa (ex: 13 de setembro 2025), avatar com iniciais, email e botão de logout.
+- Mobile: barra fixa de 56px (h-14) com logo + nome do sistema (MoviTrace) à esquerda, data curta `dd/MM/yy` centralizada e nome do usuário com botão "Sair" vermelho à direita.
+
+Um spacer (`<div class="h-14" />`) é inserido logo após o header mobile para evitar sobreposição do conteúdo.
+
 - Configurar timezone:
   `GMT,W,0#`
 - Configurar intervalo de comunicação:

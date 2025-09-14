@@ -23,3 +23,8 @@
 .animate-toast-bar {
   animation: toast-bar 3s linear forwards;
 }
+
+/* Esconde a barra de navegação inferior mobile quando mapa em fullscreen */
+body[data-fullscreen="map"] nav {
+  display: none;
+}
