@@ -7,6 +7,12 @@ import TopHeader from "./TopHeader";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import Loading from "./Loading";
+import dynamic from "next/dynamic";
+
+// Import dinâmico para evitar problemas de ícones no SSR (opcional) e garantir leveza
+const MobileBottomNav = dynamic(() => import("./MobileBottomNav"), {
+  ssr: false,
+});
 
 export default function ClientWrapper({
   children,
@@ -39,22 +45,37 @@ export default function ClientWrapper({
       {/* TopHeader só aparece se não for login */}
       {!isLogin && <TopHeader sidebarCollapsed={sidebarCollapsed} />}
       <div className="flex flex-1 min-h-0">
-        {/* Sidebar só aparece se não for login */}
-        {!isLogin && <Sidebar onCollapse={handleSidebarCollapse} />}
+        {/* Sidebar desktop */}
+        {!isLogin && (
+          <div className="hidden md:block">
+            <Sidebar onCollapse={handleSidebarCollapse} />
+          </div>
+        )}
         {/* Conteúdo principal */}
         <main
-          className="flex-1 min-w-0 transition-all duration-300"
-          style={!isLogin ? { paddingLeft: sidebarWidth } : {}}
+          className="flex-1 min-w-0 transition-all duration-300 pb-16 md:pb-0"
+          style={
+            !isLogin
+              ? {
+                  paddingLeft:
+                    typeof window !== "undefined" && window.innerWidth < 768
+                      ? 0
+                      : sidebarWidth,
+                }
+              : {}
+          }
         >
           {children}
         </main>
       </div>
       {/* Footer só aparece se não for login */}
       {!isLogin && (
-        <div style={{ paddingLeft: sidebarWidth }}>
+        <div className="hidden md:block" style={{ paddingLeft: sidebarWidth }}>
           <Footer />
         </div>
       )}
+      {/* Navegação inferior mobile */}
+      {!isLogin && <MobileBottomNav />}
     </>
   );
 }

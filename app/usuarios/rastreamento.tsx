@@ -22,6 +22,11 @@ export default function RastreamentoCliente() {
   const [posicoes, setPosicoes] = useState<Posicoes>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
+  const [selected, setSelected] = useState<{
+    r: Rastreador;
+    pos?: { lat: number; lng: number };
+    v?: Veiculo;
+  } | null>(null);
 
   useEffect(() => {
     async function fetchVeiculos() {
@@ -83,6 +88,43 @@ export default function RastreamentoCliente() {
     }
   }, [veiculos]);
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+  if (isMobile && selected && selected.pos) {
+    return (
+      <div className="fixed inset-0 z-30 flex flex-col bg-white">
+        <div className="flex items-center justify-between px-4 py-2 border-b bg-white shadow-sm">
+          <button
+            onClick={() => setSelected(null)}
+            className="text-sm px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 active:bg-gray-300 font-medium"
+          >
+            Voltar
+          </button>
+          <div className="flex-1 text-center">
+            <div className="text-base font-semibold text-gray-800 truncate">
+              {selected.r.modelo}
+            </div>
+            <div className="text-[11px] text-gray-500">
+              IMEI: {selected.r.identificador}
+            </div>
+          </div>
+          <div className="w-16" />
+        </div>
+        <div className="flex-1 relative">
+          <Map lat={selected.pos.lat} lng={selected.pos.lng} />
+          <div className="absolute bottom-4 left-0 right-0 px-4 flex gap-2 justify-center">
+            <button className="px-3 py-2 rounded-lg bg-white shadow text-xs font-medium border hover:bg-gray-50">
+              Centralizar
+            </button>
+            <button className="px-3 py-2 rounded-lg bg-white shadow text-xs font-medium border hover:bg-gray-50">
+              Histórico
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded shadow">
@@ -109,7 +151,13 @@ export default function RastreamentoCliente() {
                 ) : (
                   <div className="space-y-4">
                     {v.rastreadores.map((r) => (
-                      <div key={r.id} className="border rounded p-3">
+                      <div
+                        key={r.id}
+                        className="border rounded p-3 cursor-pointer"
+                        onClick={() =>
+                          setSelected({ r, pos: posicoes[r.id], v })
+                        }
+                      >
                         <div className="font-bold">Rastreador: {r.modelo}</div>
                         <div>Identificador (IMEI): {r.identificador}</div>
                         {posicoes[r.id] ? (
